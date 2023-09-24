@@ -2,8 +2,11 @@ package com.shopme.admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
+// scan in the entity package of the Common project and itself
+@EntityScan({"com.shopme.common.entity", "com.shopme.admin.user"})
 public class ShopmeBackendApplication {
 
 	public static void main(String[] args) {
