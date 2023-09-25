@@ -92,4 +92,13 @@ public class UserRepositoryTest {
         boolean isExists = repo.findById(2).isPresent();
         assertThat(isExists).isFalse();
     }
+
+    @Test
+    public void getUserByEmail(){
+        String email = "vukhoa@admin.com";
+        User user = repo.getUserByEmail(email);
+
+        assertThat(user).isNotNull();
+    }
 }
+
