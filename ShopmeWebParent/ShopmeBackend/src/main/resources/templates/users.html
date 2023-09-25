@@ -13,9 +13,16 @@
   <div class="container-fluid">
     <div>
       <h1>Manage Users</h1>
-      <div class="alert alert-primary">Nothing here yet</div>
+      <a th:href="@{/users/new}">Create new User</a>
     </div>
-    
+    <div th:if="${message} != null">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        [[${message}]]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
     <table class="table table-bordered table-striped table-hover table-responsive-xl">
       <thead class="thead-dark">
         <tr>

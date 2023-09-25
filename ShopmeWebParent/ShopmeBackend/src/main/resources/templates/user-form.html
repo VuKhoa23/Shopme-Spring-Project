@@ -12,40 +12,92 @@
 <body>
   <div class="container-fluid">
     <div>
-      <h1>Manage Users</h1>
-      <a th:href="@{/users/new}">Create new User</a>
+      <h1>Manage Users | Create new user</h1>
+      <a th:href="@{/users}">Back to users listing</a>
     </div>
     
-    <table class="table table-bordered table-striped table-hover table-responsive-xl">
-      <thead class="thead-dark">
-        <tr>
-          <th>User ID</th>
-          <th>Photo</th>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Roles</th>
-          <th>Enabled</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="user: ${users}">
-          <td>[[${user.id}]]</td>
-          <td>[[${user.photos}]]</td>
-          <td>[[${user.email}]]</td>
-          <td>[[${user.firstName}]]</td>
-          <td>[[${user.lastName}]]</td>
-          <td>[[${user.roles}]]</td>
-          <td>[[${user.enabled}]]</td>
-          <td>Edit and Delete</td>
-        </tr>
-      </tbody>
-    </table>
+    <form th:action="@{/users/save}" method="POST" style="max-width: 700px; margin: 0 auto" th:object="${user}">
+      <div class="border border-secondary rounded p-3">
+        <div class="form-group row">
+          <label class="col-sm-4 col-form-label">Email</label>
+          <div class="col-sm-8">
+            <input type="email" class="form-control" th:field="*{email}" required minlength="8" maxlength="128"/>
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-sm-4 col-form-label">First name</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" th:field="*{firstName}" required maxlength="128"/>
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-sm-4 col-form-label">Last name</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" th:field="*{lastName}" required maxlength="128"/>
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-sm-4 col-form-label">Password</label>
+          <div class="col-sm-8">
+            <input type="password" class="form-control" th:field="*{password}" required minlength="8" maxlength="128"/>
+          </div>
+        </div>
+        
+        <!--    Role selection    -->
+        <div class="form-group row">
+          <label class="col-sm-4 col-form-label">Roles</label>
+          <div class="col-sm-8">
+            <th:block th:each="role : ${allRoles}">
+              <!--      Map to the roles attribute of user entity        -->
+              <input class="m-2"
+                     type="checkbox"
+                     th:field="*{roles}"
+                     th:text="${role.name}"
+                     th:value="${role.id}"/>
+              - <small>[[${role.description}]]</small> <br>
+            </th:block>
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-sm-4 col-form-label">Enabled</label>
+          <div class="col-sm-8">
+            <input type="checkbox" th:field="*{enabled}"/>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <input type="submit" value="Submit" class="btn btn-primary"/>
+          <input type="button" value="Cancel" class="btn btn-secondary" id="cancelBtn"/>
+        </div>
+        
+      </div>
+    </form>
     
     <div class="text-center">
       <p>Shopme Controler Panel - Powered by VuKhoa23</p>
     </div>
   </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#cancelBtn").on("click", function(){
+      window.location = "[[@{/users}]]"
+    })
+    
+    $("#roles1").change(function() {
+    // Check if #roles1 is selected
+    if ($(this).is(":checked")) {
+      // Disable other checkboxes
+      $("#roles2, #roles3, #roles4, #roles5").prop("disabled", true);
+    } else {
+      // Enable other checkboxes
+      $("#roles2, #roles3, #roles4, #roles5").prop("disabled", false);
+    }
+  });
+  })
+</script>
 </body>
 </html>
