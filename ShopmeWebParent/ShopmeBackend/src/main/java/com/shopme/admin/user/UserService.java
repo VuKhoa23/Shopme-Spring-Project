@@ -29,7 +29,18 @@ public class UserService {
     }
 
     public void save(User user) {
-        encodeUserPassword(user);
+        if(user.getId()!=null){
+            if (user.getPassword().isEmpty()) {
+                User existingUser = userRepository.findById(user.getId()).get();
+                user.setPassword(existingUser.getPassword());
+            }
+            else{
+                encodeUserPassword(user);
+            }
+        }
+        else{
+            encodeUserPassword(user);
+        }
         userRepository.save(user);
     }
 
@@ -46,12 +57,22 @@ public class UserService {
         if(id == null){
             return false;
         }
+        // if the email is used by another user. The email is not unique
         else return user.getId().intValue() == id.intValue();
     }
 
     public User get(Integer id) throws UserNotFoundException {
         try {
             return userRepository.findById(id).get();
+        } catch(NoSuchElementException e){
+            throw new UserNotFoundException("Could not found user with ID: " + id);
+        }
+    }
+
+    public void deleteById(Integer id) throws UserNotFoundException {
+        try {
+            User user = userRepository.findById(id).get();
+            userRepository.delete(user);
         } catch(NoSuchElementException e){
             throw new UserNotFoundException("Could not found user with ID: " + id);
         }
