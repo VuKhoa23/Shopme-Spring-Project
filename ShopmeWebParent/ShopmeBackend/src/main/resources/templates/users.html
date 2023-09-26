@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <!-- use thymeleaf to use the relative path of the application  -->
-  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
   <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/fontawsome/all.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
   <title>Users - Admin</title>
 </head>
+
 <body>
   <div class="container-fluid">
     <div>
@@ -39,20 +43,31 @@
       <tbody>
         <tr th:each="user: ${users}">
           <td>[[${user.id}]]</td>
-          <td>[[${user.photos}]]</td>
+          <td class="text-center"><i class="fas fa-portrait fa-2x gray-icon"></i></td>
           <td>[[${user.email}]]</td>
           <td>[[${user.firstName}]]</td>
           <td>[[${user.lastName}]]</td>
           <td>[[${user.roles}]]</td>
-          <td>[[${user.enabled}]]</td>
-          <td>Edit and Delete</td>
+          <td class="text-center">
+            <i th:if="${user.enabled}==true" class="fa fa-check-circle green-icon" aria-hidden="true"></i>
+            <i th:if="${user.enabled}==false" class="fa fa-check-circle red-icon" aria-hidden="true"></i>
+          </td>
+          <td class="d-flex justify-content-around">
+            <a href="#">
+              <i class="fas fa-edit fa-2x green-icon"></i>
+            </a>
+            <a href="#">
+              <i class="fas fa-trash fa-2x red-icon"></i>
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>
-    
+
     <div class="text-center">
       <p>Shopme Controler Panel - Powered by VuKhoa23</p>
     </div>
   </div>
 </body>
+
 </html>
