@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -32,13 +33,34 @@ public class UserController {
         List<Role> allRoles = userService.listRoles();
         model.addAttribute("user", user);
         model.addAttribute("allRoles", allRoles);
+        model.addAttribute("pageTitle", "Create a User");
         return "user-form";
     }
 
     @PostMapping("/users/save")
     public String handleFormSubmission(@ModelAttribute User user, RedirectAttributes redirectAttributes){
-        redirectAttributes.addFlashAttribute("message", "User added successfully");
+        if(user.getId() == null){
+            redirectAttributes.addFlashAttribute("message", "User added successfully");
+        }
+        else{
+            redirectAttributes.addFlashAttribute("message", "User updated successfully");
+        }
         userService.save(user);
         return "redirect:/users";
+    }
+
+    @GetMapping("/users/edit/{id}")
+    public String showEditForm(@PathVariable(name="id") Integer id, RedirectAttributes redirectAttributes,
+                               Model model){
+        try {
+            User user = userService.get(id);
+            model.addAttribute("user", user);
+            model.addAttribute("pageTitle", "Edit User with ID: " + id);
+            model.addAttribute("allRoles", userService.listRoles());
+            return "user-form";
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/users";
+        }
     }
 }

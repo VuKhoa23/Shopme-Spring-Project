@@ -14,11 +14,12 @@
 <body>
   <div class="container-fluid">
     <div>
-      <h1>Manage Users | Create new user</h1>
+      <h1>Manage Users | [[${pageTitle}]]</h1>
       <a th:href="@{/users}">Back to users listing</a>
     </div>
 
     <form th:action="@{/users/save}" method="POST" style="max-width: 700px; margin: 0 auto" th:object="${user}" onsubmit="return checkUniqueEmail(this)">
+      <input type="hidden" th:field="*{id}" />
       <div class="border border-secondary rounded p-3">
         <div class="form-group row">
           <label class="col-sm-4 col-form-label">Email</label>
@@ -100,8 +101,16 @@
     $(document).ready(function () {
       $("#cancelBtn").on("click", function () {
         window.location = "[[@{/users}]]"
+
       })
 
+      // in edit mode. if the user is already a admin, disable all other choices
+      if ($("#roles1").is(":checked")) {
+        // Disable other checkboxes
+        $("#roles2, #roles3, #roles4, #roles5").prop("disabled", true);
+      }
+
+      // if user select admin checkbox, check the following conditions
       $("#roles1").change(function () {
         // Check if #roles1 is selected
         if ($(this).is(":checked")) {
@@ -114,7 +123,7 @@
       });
     })
 
-    /* Equivelent to the JQuery post
+    /* Equivelent to the JQuery post below
   
     res = await fetch("check-email", {
     method: 'POST',
@@ -132,9 +141,10 @@
     function checkUniqueEmail(form) {
       url = "[[@{/users/check-email}]]"
       email = $("#email").val();
+      id = $("#id").val();
       // pass the csrf token so Spring allow connection from the ajax call
       csrf = $("input[name='_csrf']").val();
-      params = { email: email, _csrf: csrf }
+      params = { id: id, email: email, _csrf: csrf }
       $.post(url, params, (response) => {
         if (response === 'OK') {
           // if the response is ok, meaning that the email is free to be used

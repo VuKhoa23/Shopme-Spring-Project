@@ -50,10 +50,10 @@
           <td>[[${user.roles}]]</td>
           <td class="text-center">
             <i th:if="${user.enabled}==true" class="fa fa-check-circle green-icon" aria-hidden="true"></i>
-            <i th:if="${user.enabled}==false" class="fa fa-check-circle red-icon" aria-hidden="true"></i>
+            <i th:if="${user.enabled}==false" class="fa fa-check-circle gray-icon" aria-hidden="true"></i>
           </td>
           <td class="d-flex justify-content-around">
-            <a href="#">
+            <a th:href="@{'/users/edit/' + ${user.id}}">
               <i class="fas fa-edit fa-2x green-icon"></i>
             </a>
             <a href="#">
