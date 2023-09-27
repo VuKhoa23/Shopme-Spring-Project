@@ -5,12 +5,13 @@ import com.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Service
+@Transactional
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -28,7 +29,7 @@ public class UserService {
         return (List<Role>) roleRepository.findAll();
     }
 
-    public void save(User user) {
+    public User save(User user) {
         if(user.getId()!=null){
             if (user.getPassword().isEmpty()) {
                 User existingUser = userRepository.findById(user.getId()).get();
@@ -41,7 +42,7 @@ public class UserService {
         else{
             encodeUserPassword(user);
         }
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private void encodeUserPassword(User user) {
@@ -58,6 +59,7 @@ public class UserService {
             return false;
         }
         // if the email is used by another user. The email is not unique
+        // if the user keep the old password. Return true
         else return user.getId().intValue() == id.intValue();
     }
 
@@ -76,5 +78,9 @@ public class UserService {
         } catch(NoSuchElementException e){
             throw new UserNotFoundException("Could not found user with ID: " + id);
         }
+    }
+
+    public void updateUserEnabledStatus(Integer id, boolean enabled){
+        userRepository.updateUserEnabledStatus(id, enabled);
     }
 }

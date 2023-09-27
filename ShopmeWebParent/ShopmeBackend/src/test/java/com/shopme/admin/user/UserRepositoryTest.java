@@ -100,5 +100,12 @@ public class UserRepositoryTest {
 
         assertThat(user).isNotNull();
     }
+
+    @Test
+    public void updateUserEnabled(){
+        repo.updateUserEnabledStatus(15, false);
+        User user = repo.findById(15).get();
+        assertThat(user.isEnabled()).isFalse();
+    }
 }
 

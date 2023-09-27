@@ -43,14 +43,17 @@
       <tbody>
         <tr th:each="user: ${users}">
           <td>[[${user.id}]]</td>
-          <td class="text-center"><i class="fas fa-portrait fa-2x gray-icon"></i></td>
+          <td class="text-center">
+            <!-- this refer to the getter we set in the user enitity -->
+            <img th:src="@{'/' + ${user.photosPath}}" />
+          </td>
           <td>[[${user.email}]]</td>
           <td>[[${user.firstName}]]</td>
           <td>[[${user.lastName}]]</td>
           <td>[[${user.roles}]]</td>
           <td class="text-center">
-            <i th:if="${user.enabled}==true" class="fa fa-check-circle green-icon" aria-hidden="true"></i>
-            <i th:if="${user.enabled}==false" class="fa fa-check-circle gray-icon" aria-hidden="true"></i>
+            <a th:if="${user.enabled}==true" th:href="@{'/users/' + ${user.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable user"></a>
+            <a th:if="${user.enabled}==false" th:href="@{'/users/' + ${user.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable user"></a>
           </td>
           <td class="d-flex justify-content-around">
             <a th:href="@{'/users/edit/' + ${user.id}}">
@@ -90,11 +93,10 @@
   </div>
   <script>
     $(document).ready(() => {
-      $(".delete-link").on('click', (e) => {
+      $(".delete-link").on('click', function (e) {
         e.preventDefault();
-        // i dont event know why ????????, doesnt work with 'this' keyword
-        url = $(".delete-link").attr("href");
-        userId = $(".delete-link").attr("userid")
+        url = $(this).attr("href");
+        userId = $(this).attr("userid")
         $("#confirm-link").attr("href", url)
         $("#confirmBody").text(`Are you sure you want to delete user ${userId} ?`);
         $("#modalConfirm").modal();

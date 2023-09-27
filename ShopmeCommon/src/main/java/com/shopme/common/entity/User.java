@@ -122,4 +122,14 @@ public class User {
                 ", roles=" + roles +
                 '}';
     }
+    // new getter method to get the image path
+    // add @Transient to tell Spring that this method doesn't relate to any field in the db
+    @Transient
+    public String getPhotosPath(){
+        if(id == null || photos == null){
+            // if the user isnt created or doesnt have a photo, return default photo
+            return "images/default-user.png";
+        }
+        return "user-photos/" + id + "/" + this.photos;
+    }
 }
