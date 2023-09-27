@@ -1,4 +1,4 @@
-# Shop-Me-Spring-Project
+# Shopme-Spring-Project
 An e-commerce web-app using Spring framework
 
 ## Structure
