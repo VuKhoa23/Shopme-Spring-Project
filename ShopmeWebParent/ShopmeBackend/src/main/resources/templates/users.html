@@ -78,14 +78,38 @@
     <table class="table table-bordered table-striped table-hover table-responsive-xl">
       <thead class="thead-dark">
         <tr>
-          <th>User ID</th>
-          <th>Photo</th>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Roles</th>
-          <th>Enabled</th>
-          <th>Action</th>
+          <th>
+            <a>User ID</a>
+          </th>
+          <th>
+            Photo
+          </th>
+          <th>
+            <a>Email</a>
+          </th>
+          <th>
+            <span th:if="${sortField == 'firstName'}" th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+            <!-- if the col is first time clicked for sorting, the default is asc -->
+            <a class="text-white" th:if="${sortField != 'firstName'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=firstName&sortOrder=asc'}">First name</a>
+            <!-- else keep revrese the order -->
+            <a class="text-white" th:unless="${sortField != 'firstName'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=firstName&sortOrder=' + ${reverseSortOrder}}">First name</a>
+          </th>
+          <th>
+            <span th:if="${sortField == 'lastName'}" th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+            <!-- if the col is first time clicked for sorting, the default is asc -->
+            <a class="text-white" th:if="${sortField != 'lastName'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=lastName&sortOrder=asc'}">Last name</a>
+            <!-- else keep revrese the order -->
+            <a class="text-white" th:unless="${sortField != 'lastName'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=lastName&sortOrder=' + ${reverseSortOrder}}">Last name</a>
+          </th>
+          <th>
+            Roles
+          </th>
+          <th>
+            <a>Enabled</a>
+          </th>
+          <th>
+            Actions
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -144,14 +168,14 @@
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center  ">
           <li class="page-item">
-            <a class="page-link" th:href="@{/users/page/1}">First</a>
+            <a class="page-link" th:href="@{'/users/page/1' + '?sortField=' + ${sortField} + '&sortOrder=' + ${sortOrder}}">First</a>
           </li>
           <li th:class="${currentPageNum == 1 ? 'page-item disabled' : 'page-item '}">
             <a class="page-link" th:href="@{'/users/page/' + ${currentPageNum - 1}}">Previous</a>
           </li>
           <!-- set dynamic class name -->
           <li th:class="${currentPageNum != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
-            <a class="page-link" th:href="@{'/users/page/' + ${i}}">
+            <a class="page-link" th:href="@{'/users/page/' + ${i} + '?sortField=' + ${sortField} + '&sortOrder=' + ${sortOrder}}">
               [[${i}]]
             </a>
           </li>
@@ -159,7 +183,7 @@
             <a class="page-link" th:href="@{'/users/page/' + ${currentPageNum + 1}}">Next</a>
           </li>
           <li class="page-item">
-            <a class="page-link" th:href="@{'/users/page/' + ${totalPages}}">Last</a>
+            <a class="page-link" th:href="@{'/users/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortOrder=' + ${sortOrder} }">Last</a>
           </li>
         </ul>
       </nav>

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +30,11 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public Page<User> listByPage(int pageNumber){
+    public Page<User> listByPage(int pageNumber, String sortField, String sortOrder){
+        Sort sort = Sort.by(sortField);
+        sort = sortOrder.equals("asc") ? sort.ascending() : sort.descending();
         // list number is 0-based
-        Pageable pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE, sort);
         return userRepository.findAll(pageable);
     }
 

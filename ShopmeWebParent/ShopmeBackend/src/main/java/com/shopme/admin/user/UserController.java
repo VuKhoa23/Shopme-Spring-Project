@@ -3,6 +3,7 @@ package com.shopme.admin.user;
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
+import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -22,29 +23,19 @@ public class UserController {
 
     @GetMapping("/users")
     public String listAll(Model model){
-        Page<User> thePage = userService.listByPage(1);
-        List<User> usersInPage = thePage.getContent();
-        model.addAttribute("users", usersInPage);
-
-        long start = (1 - 1) * UserService.PAGE_SIZE + 1;
-        long end = start + UserService.PAGE_SIZE - 1;
-
-        if(end > thePage.getTotalElements()){
-            end = thePage.getTotalElements();
-        }
-
-        model.addAttribute("start", start);
-        model.addAttribute("end", end);
-        model.addAttribute("totalItems", thePage.getTotalElements());
-        model.addAttribute("totalPages", thePage.getTotalPages());
-        model.addAttribute("currentPageNum", 1);
-        model.addAttribute("users", usersInPage);
-        return "users";
+        return listByPageNumber(1, model, "id", "asc");
     }
 
     @GetMapping("/users/page/{pageNumber}")
-    public String listByPageNumber(@PathVariable("pageNumber") int pageNumber, Model model){
-        Page<User> thePage = userService.listByPage(pageNumber);
+    public String listByPageNumber(@PathVariable("pageNumber") int pageNumber, Model model,
+                                   @RequestParam(name = "sortField", required = false) String sortField,
+                                   @RequestParam(name="sortOrder", required = false) String sortOrder){
+        // if user doesnt request any sortField or sortOrder. Use these as default values
+        if (sortOrder == null || sortField == null) {
+            sortOrder="asc";
+            sortField = "id";
+        }
+        Page<User> thePage = userService.listByPage(pageNumber, sortField, sortOrder);
         List<User> usersInPage = thePage.getContent();
 
         long start = (pageNumber - 1) * UserService.PAGE_SIZE + 1;
@@ -60,6 +51,9 @@ public class UserController {
         model.addAttribute("totalPages", thePage.getTotalPages());
         model.addAttribute("currentPageNum", pageNumber);
         model.addAttribute("users", usersInPage);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortOrder", sortOrder);
+        model.addAttribute("reverseSortOrder", sortOrder.equals("asc") ? "desc" : "asc");
         return "users";
     }
 
