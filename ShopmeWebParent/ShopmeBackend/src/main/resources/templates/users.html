@@ -16,6 +16,54 @@
 <body>
   <div class="container-fluid">
     <div>
+      <nav class="navbar navbar-expand-lg back bg-dark navbar-dark">
+        <a class="navbar-brand" th:href="@{/}">
+          <img th:src="@{/images/ShopmeAdminSmall.png}" />
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="topNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/users}">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/categories}">Categories</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/brands}">Brands</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/products}">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/customers}">Customers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/shipping}">Shipping</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/orders}">Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/report}">Sales Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/articles}">Articles</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/menu}">Menu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/settings}">Settings</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div>
       <h1>Manage Users</h1>
       <a th:href="@{/users/new}">Create new User</a>
     </div>
@@ -85,6 +133,36 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="text-center ">
+      <span th:if="${totalItems} > 0">Showing users [[${start}]] to [[${end}]] of total [[${totalItems}]]</span>
+      <span th:unless="${totalItems} > 0">No users found</span>
+    </div>
+
+    <div id="paginationSection">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center  ">
+          <li class="page-item">
+            <a class="page-link" th:href="@{/users/page/1}">First</a>
+          </li>
+          <li th:class="${currentPageNum == 1 ? 'page-item disabled' : 'page-item '}">
+            <a class="page-link" th:href="@{'/users/page/' + ${currentPageNum - 1}}">Previous</a>
+          </li>
+          <!-- set dynamic class name -->
+          <li th:class="${currentPageNum != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a class="page-link" th:href="@{'/users/page/' + ${i}}">
+              [[${i}]]
+            </a>
+          </li>
+          <li th:class="${currentPageNum == totalPages ? 'page-item disabled' : 'page-item '}">
+            <a class="page-link" th:href="@{'/users/page/' + ${currentPageNum + 1}}">Next</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" th:href="@{'/users/page/' + ${totalPages}}">Last</a>
+          </li>
+        </ul>
+      </nav>
     </div>
 
     <div class="text-center">

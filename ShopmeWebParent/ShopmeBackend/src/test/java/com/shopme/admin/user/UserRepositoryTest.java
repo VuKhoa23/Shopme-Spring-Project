@@ -7,14 +7,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 
-@DataJpaTest
+@DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(value = false)
 public class UserRepositoryTest {
@@ -106,6 +111,19 @@ public class UserRepositoryTest {
         repo.updateUserEnabledStatus(15, false);
         User user = repo.findById(15).get();
         assertThat(user.isEnabled()).isFalse();
+    }
+
+    @Test
+    public void listingFirstPaginationPage(){
+        int pageNo = 0;
+        int pageSize = 4;
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<User> page = repo.findAll(pageable);
+
+        List<User> usersInPage = page.getContent();
+        usersInPage.forEach(user -> {
+            System.out.println(user);
+        });
     }
 }
 

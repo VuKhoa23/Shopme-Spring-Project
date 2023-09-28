@@ -75,6 +75,7 @@
             <input type="hidden" th:field="*{photos}" />
             <input class="mb-2" type="file" accept="image/png image/jpeg" id="image-input" name="imageInput" />
             <br />
+            <!-- user-photos/${id}/...png is under the management of ResourceHandler in MVC config -->
             <img th:src="@{'/' + ${user.photosPath}}" alt="User photo" id="thumbnail" />
           </div>
         </div>

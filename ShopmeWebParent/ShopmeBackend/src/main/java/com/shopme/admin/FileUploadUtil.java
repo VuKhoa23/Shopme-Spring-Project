@@ -26,18 +26,20 @@ public class FileUploadUtil {
 
     public static void cleanDir(String dir){
         Path dirPath = Paths.get(dir);
-        try{
-            Files.list(dirPath).forEach(file -> {
-                if(!Files.isDirectory(file)){
-                    try {
-                        Files.delete(file);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        if(Files.exists(dirPath)) {
+            try {
+                Files.list(dirPath).forEach(file -> {
+                    if (!Files.isDirectory(file)) {
+                        try {
+                            Files.delete(file);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                });
+            } catch (IOException e) {
+                System.out.println("Something went wrong");
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import com.shopme.admin.FileUploadUtil;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -21,9 +22,44 @@ public class UserController {
 
     @GetMapping("/users")
     public String listAll(Model model){
-        List<User> users = userService.listAll();
-        model.addAttribute("users", users);
+        Page<User> thePage = userService.listByPage(1);
+        List<User> usersInPage = thePage.getContent();
+        model.addAttribute("users", usersInPage);
 
+        long start = (1 - 1) * UserService.PAGE_SIZE + 1;
+        long end = start + UserService.PAGE_SIZE - 1;
+
+        if(end > thePage.getTotalElements()){
+            end = thePage.getTotalElements();
+        }
+
+        model.addAttribute("start", start);
+        model.addAttribute("end", end);
+        model.addAttribute("totalItems", thePage.getTotalElements());
+        model.addAttribute("totalPages", thePage.getTotalPages());
+        model.addAttribute("currentPageNum", 1);
+        model.addAttribute("users", usersInPage);
+        return "users";
+    }
+
+    @GetMapping("/users/page/{pageNumber}")
+    public String listByPageNumber(@PathVariable("pageNumber") int pageNumber, Model model){
+        Page<User> thePage = userService.listByPage(pageNumber);
+        List<User> usersInPage = thePage.getContent();
+
+        long start = (pageNumber - 1) * UserService.PAGE_SIZE + 1;
+        long end = start + UserService.PAGE_SIZE - 1;
+
+        if(end > thePage.getTotalElements()){
+            end = thePage.getTotalElements();
+        }
+
+        model.addAttribute("start", start);
+        model.addAttribute("end", end);
+        model.addAttribute("totalItems", thePage.getTotalElements());
+        model.addAttribute("totalPages", thePage.getTotalPages());
+        model.addAttribute("currentPageNum", pageNumber);
+        model.addAttribute("users", usersInPage);
         return "users";
     }
 
@@ -47,9 +83,6 @@ public class UserController {
         else{
             redirectAttributes.addFlashAttribute("message", "User updated successfully");
         }
-
-        System.out.println("-------The PHOTOS: " + user.getPhotos());
-
         // recommand to use the StringUtils to clean the file name
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         if(!fileName.isEmpty()) {
