@@ -125,5 +125,25 @@ public class UserRepositoryTest {
             System.out.println(user);
         });
     }
+
+    @Test
+    public void findUsersByKeyWord(){
+        String keyWord = "bruce";
+
+        int pageNo = 0;
+        int pageSize = 4;
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<User> page = repo.findAllByKeyWord(keyWord, pageable);
+
+        List<User> usersInPage = page.getContent();
+
+        usersInPage.forEach(user -> {
+            System.out.println(user);
+        });
+
+        assertThat(usersInPage.size()).isGreaterThan(0);
+    }
+
+
 }
 

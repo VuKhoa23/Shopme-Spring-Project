@@ -23,19 +23,20 @@ public class UserController {
 
     @GetMapping("/users")
     public String listAll(Model model){
-        return listByPageNumber(1, model, "id", "asc");
+        return listByPageNumber(1, model, "id", "asc", null);
     }
 
     @GetMapping("/users/page/{pageNumber}")
     public String listByPageNumber(@PathVariable("pageNumber") int pageNumber, Model model,
                                    @RequestParam(name = "sortField", required = false) String sortField,
-                                   @RequestParam(name="sortOrder", required = false) String sortOrder){
+                                   @RequestParam(name="sortOrder", required = false) String sortOrder,
+                                   @RequestParam(name="keyWord", required = false)String keyWord){
         // if user doesnt request any sortField or sortOrder. Use these as default values
         if (sortOrder == null || sortField == null) {
             sortOrder="asc";
             sortField = "id";
         }
-        Page<User> thePage = userService.listByPage(pageNumber, sortField, sortOrder);
+        Page<User> thePage = userService.listByPage(pageNumber, sortField, sortOrder, keyWord);
         List<User> usersInPage = thePage.getContent();
 
         long start = (pageNumber - 1) * UserService.PAGE_SIZE + 1;
@@ -54,6 +55,7 @@ public class UserController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("reverseSortOrder", sortOrder.equals("asc") ? "desc" : "asc");
+        model.addAttribute("keyWord", keyWord);
         return "users";
     }
 
