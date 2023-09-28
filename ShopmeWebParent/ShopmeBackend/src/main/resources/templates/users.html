@@ -79,13 +79,21 @@
       <thead class="thead-dark">
         <tr>
           <th>
-            <a>User ID</a>
+            <span th:if="${sortField == 'id'}" th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+            <!-- if the col is first time clicked for sorting, the default is asc -->
+            <a class="text-white" th:if="${sortField != 'id'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=id&sortOrder=asc'}">User ID</a>
+            <!-- else keep revrese the order -->
+            <a class="text-white" th:unless="${sortField != 'id'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=id&sortOrder=' + ${reverseSortOrder}}">User ID</a>
           </th>
           <th>
             Photo
           </th>
           <th>
-            <a>Email</a>
+            <span th:if="${sortField == 'email'}" th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+            <!-- if the col is first time clicked for sorting, the default is asc -->
+            <a class="text-white" th:if="${sortField != 'email'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=email&sortOrder=asc'}">Email</a>
+            <!-- else keep revrese the order -->
+            <a class="text-white" th:unless="${sortField != 'email'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=email&sortOrder=' + ${reverseSortOrder}}">Email</a>
           </th>
           <th>
             <span th:if="${sortField == 'firstName'}" th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
@@ -105,7 +113,11 @@
             Roles
           </th>
           <th>
-            <a>Enabled</a>
+            <span th:if="${sortField == 'enabled'}" th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+            <!-- if the col is first time clicked for sorting, the default is asc -->
+            <a class="text-white" th:if="${sortField != 'enabled'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=enabled&sortOrder=asc'}">Enabled</a>
+            <!-- else keep revrese the order -->
+            <a class="text-white" th:unless="${sortField != 'enabled'}" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=enabled&sortOrder=' + ${reverseSortOrder}}">Enabled</a>
           </th>
           <th>
             Actions
