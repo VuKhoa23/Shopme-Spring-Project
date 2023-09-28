@@ -95,7 +95,8 @@ public class UserController {
             }
             userService.save(user);
         }
-        return "redirect:/users";
+        // display the affected user for more convinient user expirience
+        return "redirect:/users/page/1?keyWord=" + user.getEmail();
     }
 
     @GetMapping("/users/edit/{id}")
