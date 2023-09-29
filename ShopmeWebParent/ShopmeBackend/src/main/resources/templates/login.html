@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- use thymeleaf to use the relative path of the application  -->
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/fontawsome/all.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+  <title>Users - Admin</title>
+</head>
+
+<body>
+  <div class="container-fluid text-center ">
+    <!-- Show the error -->
+    <img th:src="@{/images/ShopmeAdminBig.png}" />
+    <div class="alert alert-danger alert-dismissible fade show text-center mb-2" role="alert" style="max-width: 400px; margin: 0 auto;">
+      [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
+      <button type=" button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form th:action="@{/login}" method="POST" style="max-width: 400px; margin: 0 auto;">
+      <div class="border border-secondary rounded p-2">
+        <p>Login to Shopme Control Panel</p>
+        <p>
+          <input type="email" name="email" class="form-control" required placeholder="Email" />
+        </p>
+        <p>
+          <input type="password" name="password" class="form-control" required placeholder="Password" />
+        </p>
+        <p>
+          <input type="submit" value="Login" class="btn btn-primary " />
+        </p>
+      </div>
+    </form>
+    <div class="text-center">
+      <p>Shopme - Powered by VuKhoa23</p>
+    </div>
+  </div>
+</body>
+
+</html>
