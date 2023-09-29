@@ -3,7 +3,7 @@ package com.shopme.admin.user;
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
-import org.apache.coyote.Request;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -133,5 +133,42 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", "User with ID " + id
                                                                                         + (enabled ? " is enabled" : " is disabled"));
         return "redirect:/users";
+    }
+
+
+    @GetMapping("users/export/csv")
+    public void exportToCSV(HttpServletResponse response){
+        List<User> users = userService.listAll();
+
+        UserCsvExporter exporter = new UserCsvExporter();
+        try {
+            exporter.export(users, response);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("users/export/excel")
+    public void exportToExcel(HttpServletResponse response){
+        List<User> users = userService.listAll();
+
+        UserExcelExporter exporter = new UserExcelExporter();
+        try {
+            exporter.export(users, response);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("users/export/pdf")
+    public void exportToPDF(HttpServletResponse response){
+        List<User> users = userService.listAll();
+
+        UserPdfExporter exporter = new UserPdfExporter();
+        try {
+            exporter.export(users, response);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
