@@ -6,7 +6,9 @@
 </head>
 
 <body>
-  <th th:fragment="column-link(fieldName, columnLabel)">
+
+  <!-- if removeTag == "tag", thymeleaf will delete the parent <th> tag, which is the <th> tag below, and use the our parent tag with class "hideable-column" which we defined in users.html-->
+  <th th:fragment="column-link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
     <span th:if="${sortField == fieldName}" th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
     <!-- if the col is first time clicked for sorting, the default is asc, else keep reversing it -->
     <a class="text-white" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=' + ${fieldName} + '&sortOrder='+ ${sortField != fieldName ? 'asc' : reverseSortOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">[[${columnLabel}]]</a>

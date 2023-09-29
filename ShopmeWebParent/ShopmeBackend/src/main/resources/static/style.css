@@ -9,3 +9,36 @@
 .red-icon {
   color: red !important;
 }
+
+/* small screen */
+@media screen and (max-width: 768px) {
+  div.large-screen {
+    display: none !important;
+  }
+  div.small-screen {
+    display: block !important;
+  }
+}
+
+/* medium screen */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  div.large-screen {
+    display: block !important;
+  }
+  div.small-screen {
+    display: none !important;
+  }
+  .hideable-column {
+    display: none !important;
+  }
+}
+
+/* large screen */
+@media screen and (min-width: 1024px) {
+  div.small-screen {
+    display: none !important;
+  }
+  .hideable-column {
+    display: block !important;
+  }
+}

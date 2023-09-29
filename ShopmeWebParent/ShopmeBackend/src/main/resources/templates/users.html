@@ -63,15 +63,23 @@
       </nav>
     </div>
 
-    <div>
+    <div class="mb-2 ">
       <h1>Manage Users</h1>
-      <a th:href="@{/users/new}">Create new User</a>
-      |
-      <a th:href="@{/users/export/csv}">Export to CSV</a>
-      |
-      <a th:href="@{/users/export/excel}">Export to Excel</a>
-      |
-      <a th:href="@{/users/export/pdf}">Export to PDF</a>
+      <a th:href="@{/users/new}" title="Create User" class="user-p">
+        <i class="fas fa-user-plus fa-3x gray-icon" aria-hidden="true"></i>
+      </a>
+      &nbsp;&nbsp;
+      <a th:href="@{/users/export/csv}" title="Export CSV File">
+        <i class="fas fa-file-csv fa-3x gray-icon"></i>
+      </a>
+      &nbsp;&nbsp;
+      <a th:href="@{/users/export/excel}" title="Export Excel File">
+        <i class="fas fa-file-excel fa-3x gray-icon"></i>
+      </a>
+      &nbsp;&nbsp;
+      <a th:href="@{/users/export/pdf}" title="Export PDF File">
+        <i class="fas fa-file-pdf fa-3x gray-icon"></i>
+      </a>
     </div>
 
     <!-- search form -->
@@ -83,9 +91,9 @@
         Filter:&nbsp;
         <input class="form-control" type="search" name="keyWord" required />
         &nbsp;&nbsp;
-        <input type="submit" value="Search" class="btn btn-primary " />
+        <button type="submit" class="btn btn-primary fas fa-search"></button>
         &nbsp;&nbsp;
-        <input type="button" value="Clear" onclick="clearFilter()" class="btn btn-secondary " />
+        <button type="button" onclick="clearFilter()" class="btn btn-secondary fas fa-eraser"></button>
       </form>
     </div>
 
@@ -97,51 +105,142 @@
         </button>
       </div>
     </div>
-    <table class="table table-bordered table-striped table-hover table-responsive-xl">
-      <thead class="thead-dark">
-        <tr>
-          <th th:replace="fragments :: column-link('id', 'User ID')" />
-          <th>
-            Photo
-          </th>
-          <th th:replace="fragments :: column-link('email', 'Email')" />
-          <th th:replace="fragments :: column-link('firstName', 'First Name')" />
-          <th th:replace="fragments :: column-link('lastName', 'Last Name')" />
-          <th>
-            Roles
-          </th>
-          <th th:replace="fragments :: column-link('enabled', 'Enabled')" />
-          <th>
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="user: ${users}">
-          <td>[[${user.id}]]</td>
-          <td class="text-center">
-            <!-- this refer to the getter we set in the user enitity -->
-            <img th:src="@{'/' + ${user.photosPath}}" />
-          </td>
-          <td>[[${user.email}]]</td>
-          <td>[[${user.firstName}]]</td>
-          <td>[[${user.lastName}]]</td>
-          <td>[[${user.roles}]]</td>
-          <td class="text-center">
+    <!-- Large screen -->
+    <div class="large-screen">
+      <table class="table table-bordered table-striped table-hover table-responsive-xl">
+        <thead class="thead-dark">
+          <tr>
+            <th class="hideable-column">
+              <!-- if the remove tag is 'tag', thymeleaf will delete the parent tag in the fragments.html code -->
+              <th th:replace="fragments :: column-link('id', 'User ID', 'tag')" />
+            </th>
+            <th>
+              Photo
+            </th>
+            <th class="hideable-column">
+              <th th:replace="fragments :: column-link('email', 'Email', 'tag')" />
+            </th>
+            <th th:replace="fragments :: column-link('firstName', 'First Name', 'none')" />
+            <th th:replace="fragments :: column-link('lastName', 'Last Name', 'none')" />
+            <th>
+              Roles
+            </th>
+            <th th:replace="fragments :: column-link('enabled', 'Enabled', 'none')" />
+            <th>
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user: ${users}">
+            <td class="hideable-column">[[${user.id}]]</td>
+            <td class="text-center">
+              <!-- this refer to the getter we set in the user enitity -->
+              <!-- we use @transient so the Spring know the getter doesnt refer to any database field of user -->
+              <img th:src="@{'/' + ${user.photosPath}}" />
+            </td>
+            <td class="hideable-column">[[${user.email}]]</td>
+            <td>[[${user.firstName}]]</td>
+            <td>[[${user.lastName}]]</td>
+            <td>[[${user.roles}]]</td>
+            <td class="text-center">
+              <a th:if="${user.enabled}==true" th:href="@{'/users/' + ${user.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable user"></a>
+              <a th:if="${user.enabled}==false" th:href="@{'/users/' + ${user.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable user"></a>
+            </td>
+            <td class="d-flex justify-content-around">
+              <a th:href="@{'/users/edit/' + ${user.id}}">
+                <i class="fas fa-edit fa-2x green-icon"></i>
+              </a>
+              <a class="delete-link" th:href="@{'/users/delete/' + ${user.id}}" th:userid="${user.id}">
+                <i class="fas fa-trash fa-2x red-icon"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="text-center ">
+        <span th:if="${totalItems} > 0">Showing users [[${start}]] to [[${end}]] of total [[${totalItems}]]</span>
+        <span th:unless="${totalItems} > 0">No users found</span>
+      </div>
+
+      <div th:if="${totalItems} > 0" id="paginationSection">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center  ">
+            <li class="page-item">
+              <a th:replace="fragments::pagination-link('1', 'First')" />
+            </li>
+            <li th:class="${currentPageNum == 1 ? 'page-item disabled' : 'page-item '}">
+              <a th:replace="fragments::pagination-link(${currentPageNum - 1}, 'Previous')" />
+            </li>
+            <!-- set dynamic class name -->
+            <li th:class="${currentPageNum != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+              <a th:replace="fragments::pagination-link(${i}, ${i})" />
+            </li>
+            <li th:class="${currentPageNum == totalPages ? 'page-item disabled' : 'page-item '}">
+              <a th:replace="fragments::pagination-link(${currentPageNum + 1}, 'Next')" />
+            </li>
+            <li class="page-item">
+              <a th:replace="fragments::pagination-link(${totalPages}, 'Last')" />
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Small screen -->
+    <div class="small-screen">
+      <div th:each="user : ${users}" class="row m-1">
+        <div class="col">
+          <!-- this refer to the getter we set in the user enitity -->
+          <!-- we use @transient so the Spring know the getter doesnt refer to any database field of user -->
+          <img th:src="@{'/' + ${user.photosPath}}" style="width: 100px;" />
+        </div>
+        <div class="col">
+          <div>[[${user.firstName + ' ' + user.lastName}]]</div>
+          <div>[[${user.roles}]]</div>
+          <div>
             <a th:if="${user.enabled}==true" th:href="@{'/users/' + ${user.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable user"></a>
             <a th:if="${user.enabled}==false" th:href="@{'/users/' + ${user.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable user"></a>
-          </td>
-          <td class="d-flex justify-content-around">
+
             <a th:href="@{'/users/edit/' + ${user.id}}">
               <i class="fas fa-edit fa-2x green-icon"></i>
             </a>
             <a class="delete-link" th:href="@{'/users/delete/' + ${user.id}}" th:userid="${user.id}">
               <i class="fas fa-trash fa-2x red-icon"></i>
             </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center ">
+        <span th:if="${totalItems} > 0">Showing users [[${start}]] to [[${end}]] of total [[${totalItems}]]</span>
+        <span th:unless="${totalItems} > 0">No users found</span>
+      </div>
+
+      <div th:if="${totalItems} > 0" id="paginationSection">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center flex-wrap  ">
+            <li class="page-item">
+              <a th:replace="fragments::pagination-link('1', 'First')" />
+            </li>
+            <li th:class="${currentPageNum == 1 ? 'page-item disabled' : 'page-item '}">
+              <a th:replace="fragments::pagination-link(${currentPageNum - 1}, 'Previous')" />
+            </li>
+            <!-- set dynamic class name -->
+            <li th:class="${currentPageNum != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+              <a th:replace="fragments::pagination-link(${i}, ${i})" />
+            </li>
+            <li th:class="${currentPageNum == totalPages ? 'page-item disabled' : 'page-item '}">
+              <a th:replace="fragments::pagination-link(${currentPageNum + 1}, 'Next')" />
+            </li>
+            <li class="page-item">
+              <a th:replace="fragments::pagination-link(${totalPages}, 'Last')" />
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
 
     <!-- Modal -->
 
@@ -163,33 +262,6 @@
       </div>
     </div>
 
-    <div class="text-center ">
-      <span th:if="${totalItems} > 0">Showing users [[${start}]] to [[${end}]] of total [[${totalItems}]]</span>
-      <span th:unless="${totalItems} > 0">No users found</span>
-    </div>
-
-    <div th:if="${totalItems} > 0" id="paginationSection">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center  ">
-          <li class="page-item">
-            <a th:replace="fragments::pagination-link('1', 'First')" />
-          </li>
-          <li th:class="${currentPageNum == 1 ? 'page-item disabled' : 'page-item '}">
-            <a th:replace="fragments::pagination-link(${currentPageNum - 1}, 'Previous')" />
-          </li>
-          <!-- set dynamic class name -->
-          <li th:class="${currentPageNum != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
-            <a th:replace="fragments::pagination-link(${i}, ${i})" />
-          </li>
-          <li th:class="${currentPageNum == totalPages ? 'page-item disabled' : 'page-item '}">
-            <a th:replace="fragments::pagination-link(${currentPageNum + 1}, 'Next')" />
-          </li>
-          <li class="page-item">
-            <a th:replace="fragments::pagination-link(${totalPages}, 'Last')" />
-          </li>
-        </ul>
-      </nav>
-    </div>
 
     <div class="text-center">
       <p>Shopme Controler Panel - Powered by VuKhoa23</p>
