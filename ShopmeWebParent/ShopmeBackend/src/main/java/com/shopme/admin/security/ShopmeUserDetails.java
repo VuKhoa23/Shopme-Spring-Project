@@ -39,6 +39,10 @@ public class ShopmeUserDetails implements UserDetails {
         return user.getEmail();
     }
 
+    public String getFullname(){
+        return user.getFirstName() + " " + user.getLastName();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -57,5 +61,13 @@ public class ShopmeUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.isEnabled();
+    }
+
+    public void setFirstName(String firstName) {
+        user.setFirstName(firstName);
+    }
+
+    public void setLastName(String lastName) {
+        user.setLastName(lastName);
     }
 }

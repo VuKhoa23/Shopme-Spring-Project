@@ -5,4 +5,34 @@ $(document).ready(function () {
     e.preventDefault();
     document.logoutForm.submit();
   });
+  customizeDropDownMenu();
 });
+
+// JS to handle to dropdown menu and logout link dropdown
+function customizeDropDownMenu() {
+  $(".navbar .dropdown").hover(
+    // slide down to show the logout
+    function () {
+      $(this)
+        .find(".dropdown-menu")
+        .first()
+        .stop(true, true)
+        .delay(250)
+        .slideDown();
+    },
+    // slide up to close the logout link
+    function () {
+      $(this)
+        .find(".dropdown-menu")
+        .first()
+        .stop(true, true)
+        .delay(100)
+        .slideUp();
+    }
+  );
+
+  // select the a tag in element with drop-down class
+  $(".dropdown > a").click(function (e) {
+    location.href = this.href;
+  });
+}

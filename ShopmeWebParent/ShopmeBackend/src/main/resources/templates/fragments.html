@@ -86,7 +86,7 @@
           <li class="nav-item dropdown">
             <!-- get the username by the getUsername() in ShopmeUserDetails -->
             <!-- we can get any getter in ShopmeUserDetails -->
-            <a class="nav-link dropdown-toggle username-link" data-toggle="dropdown" sec:authentication="principal.username"></a>
+            <a class="nav-link dropdown-toggle username-link" th:href="@{/account}" data-toggle="dropdown" sec:authentication="principal.fullname"></a>
             <div class="dropdown-menu">
               <a class="dropdown-item" id="logoutLink" th:href="@{/logout}">Logout</a>
             </div>

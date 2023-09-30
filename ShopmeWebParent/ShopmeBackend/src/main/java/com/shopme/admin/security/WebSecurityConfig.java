@@ -23,7 +23,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return new ShopmeUserDetailsService();
     }
 
@@ -39,9 +39,10 @@ public class WebSecurityConfig {
 
     // new syntax for Spring 6
     @Bean
-    public AuthenticationManager authenticationManager(){
+    public AuthenticationManager authenticationManager() {
         return new ProviderManager(authenticationProvider());
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -59,10 +60,19 @@ public class WebSecurityConfig {
                             .defaultSuccessUrl("/")
                             .permitAll();
                 })
-                .logout(configurer->{
+                .logout(configurer -> {
                     configurer.permitAll();
+                })
+                // remember me keep user logged in even when we quit the browser
+                // after the server restart. The new key for the cookie will be generated
+                // so we need to specify a fixed key so when we restart the server. The cookie remain
+                .rememberMe(remember -> {
+                    remember.key("This_is_the_fixed_key_for_remember_me")
+                            // set cookie for 1 week
+                            .tokenValiditySeconds(7 * 24 * 60 * 60);
                 });
         return http.build();
     }
+
 
 }

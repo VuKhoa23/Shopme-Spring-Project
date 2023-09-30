@@ -1,17 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <!-- use thymeleaf to use the relative path of the application  -->
-  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-  <link rel="stylesheet" type="text/css" th:href="@{/fontawsome/all.css}" />
-  <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
-  <title>Users - Admin</title>
-</head>
+<head th:replace="fragments :: head('Login - Shopme Admin')" />
 
 <body>
   <div class="container-fluid text-center ">
@@ -39,6 +29,10 @@
         </p>
         <p>
           <input type="password" name="password" class="form-control" required placeholder="Password" />
+        </p>
+        <p>
+          <!-- set name="remember-me" so SpringSecurity can regconize the remember me action  -->
+          <input type="checkbox" name="remember-me" />&nbsp; Remember me (Keep me logeed in)
         </p>
         <p>
           <input type="submit" value="Login" class="btn btn-primary " />
