@@ -10,6 +10,11 @@
   color: red !important;
 }
 
+/* user name link on the nav bar */
+.username-link:hover {
+  cursor: pointer !important;
+}
+
 /* small screen */
 @media screen and (max-width: 768px) {
   div.large-screen {

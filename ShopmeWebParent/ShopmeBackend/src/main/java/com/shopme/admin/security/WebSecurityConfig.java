@@ -50,11 +50,13 @@ public class WebSecurityConfig {
                             // permit user to request the images and  web jars like bootstrap and jquery
                             .requestMatchers("/images/**").permitAll()
                             .requestMatchers("/webjars/**").permitAll()
+                            .requestMatchers("/js/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .formLogin(form -> {
                     form.loginPage("/login")
                             .usernameParameter("email")
+                            .defaultSuccessUrl("/")
                             .permitAll();
                 })
                 .logout(configurer->{
