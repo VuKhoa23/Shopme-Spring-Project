@@ -17,12 +17,20 @@
   <div class="container-fluid text-center ">
     <!-- Show the error -->
     <img th:src="@{/images/ShopmeAdminBig.png}" />
-    <div class="alert alert-danger alert-dismissible fade show text-center mb-2" role="alert" style="max-width: 400px; margin: 0 auto;">
+    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show text-center mb-2" role="alert" style="max-width: 400px; margin: 0 auto;">
       [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
       <button type=" button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
+    <!-- show logout log -->
+    <div th:if="${param.logout}" class="alert alert-info alert-dismissible fade show text-center mb-2" role="alert" style="max-width: 400px; margin: 0 auto;">
+      You have been logged out
+      <button type=" button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
     <form th:action="@{/login}" method="POST" style="max-width: 400px; margin: 0 auto;">
       <div class="border border-secondary rounded p-2">
         <p>Login to Shopme Control Panel</p>
