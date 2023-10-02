@@ -11,7 +11,7 @@
     <div th:replace="fragments :: header-nav-bar" />
     <div>
       <h1>Control panel home page</h1>
-      <div class="alert alert-primary">Nothing here yet</div>
+      <span>Welcome <a th:href="@{/account}" sec:authentication="principal.fullname"></a> | <span sec:authentication="principal.authorities"></span></span>
     </div>
 
     <div th:replace="fragments :: footer" />

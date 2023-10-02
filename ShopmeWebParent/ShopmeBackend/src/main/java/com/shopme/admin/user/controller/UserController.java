@@ -1,6 +1,8 @@
-package com.shopme.admin.user;
+package com.shopme.admin.user.controller;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.user.UserNotFoundException;
+import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.exporter.UserCsvExporter;
 import com.shopme.admin.user.exporter.UserExcelExporter;
 import com.shopme.admin.user.exporter.UserPdfExporter;
@@ -59,7 +61,7 @@ public class UserController {
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("reverseSortOrder", sortOrder.equals("asc") ? "desc" : "asc");
         model.addAttribute("keyWord", keyWord);
-        return "users";
+        return "users/users";
     }
 
     @GetMapping("/users/new")
@@ -70,7 +72,7 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("allRoles", allRoles);
         model.addAttribute("pageTitle", "Create a User");
-        return "user-form";
+        return "users/user-form";
     }
 
     @PostMapping("/users/save")
@@ -110,7 +112,7 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("pageTitle", "Edit User with ID: " + id);
             model.addAttribute("allRoles", userService.listRoles());
-            return "user-form";
+            return "users/user-form";
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
             return "redirect:/users";

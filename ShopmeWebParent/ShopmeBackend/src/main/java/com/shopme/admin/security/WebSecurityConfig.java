@@ -52,6 +52,9 @@ public class WebSecurityConfig {
                             .requestMatchers("/images/**").permitAll()
                             .requestMatchers("/webjars/**").permitAll()
                             .requestMatchers("/js/**").permitAll()
+                            // authorization
+                            .requestMatchers("/users/**").hasAuthority("Admin")
+                            .requestMatchers("/categories/**").hasAnyAuthority("Admin", "Editor")
                             .anyRequest().authenticated();
                 })
                 .formLogin(form -> {
@@ -67,6 +70,7 @@ public class WebSecurityConfig {
                 // after the server restart. The new key for the cookie will be generated
                 // so we need to specify a fixed key so when we restart the server. The cookie remain
                 .rememberMe(remember -> {
+                    // set remember me fixed key so the user stay logged in after restarting server
                     remember.key("This_is_the_fixed_key_for_remember_me")
                             // set cookie for 1 week
                             .tokenValiditySeconds(7 * 24 * 60 * 60);
