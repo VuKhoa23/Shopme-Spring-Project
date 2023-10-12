@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="https://thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="fragments :: head('Error - Shopme Admin')" />
+
+<body>
+  <div class="container-fluid">
+    <div th:replace="fragments :: header-nav-bar" />
+
+    <!-- display error message -->
+    <h2 class="m-3">403 NOT AUTHORIZED</h2>
+
+    <div th:replace="fragments :: footer" />
+  </div>
+
+</body>
+
+</html>
