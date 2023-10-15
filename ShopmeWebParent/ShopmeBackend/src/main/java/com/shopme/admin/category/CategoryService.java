@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
@@ -14,6 +15,15 @@ import java.util.Set;
 public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
+
+    public Category findById(Integer id) throws CategoryNotFoundException {
+        try {
+            return categoryRepository.findById(id).get();
+        }
+        catch(NoSuchElementException e){
+            throw new CategoryNotFoundException("No such category");
+        }
+    }
 
     public List<Category> listAll() {
         List<Category> roots = categoryRepository.listRootCategories();

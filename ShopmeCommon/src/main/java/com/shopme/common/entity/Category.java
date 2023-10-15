@@ -19,7 +19,7 @@ public class Category {
     private String image;
     private boolean enabled;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Category parent;
 
@@ -134,13 +134,12 @@ public class Category {
         this.children = children;
     }
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", alias='" + alias + '\'' +
-                ", parent=" + parent.name +
-                '}';
+
+    @Transient
+    public String getImagePath(){
+        if(image.isEmpty()){
+            return "/images/empty.jpg";
+        }
+        return "/categories-images/" + this.id + "/" + this.image;
     }
 }

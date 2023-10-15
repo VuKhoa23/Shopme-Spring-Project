@@ -57,7 +57,7 @@
             <input class="mb-2" type="file" accept="image/png image/jpeg" id="image-input" name="imageInput" />
             <br />
             <!-- user-photos/${id}/...png is under the management of ResourceHandler in MVC config -->
-            <img th:src="@{/images/empty.jpg}" alt="Category photo" id="thumbnail" />
+            <img th:src="@{${category.imagePath}}" alt="Category photo" id="thumbnail" />
           </div>
         </div>
 
