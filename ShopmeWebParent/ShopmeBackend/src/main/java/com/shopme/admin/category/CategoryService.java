@@ -16,11 +16,42 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public List<Category> listAll() {
-        return (List<Category>) categoryRepository.findAll();
+        List<Category> roots = categoryRepository.listRootCategories();
+        return listTree(roots);
+    }
+
+    private List<Category> listTree(List<Category> roots){
+        List<Category> tree = new ArrayList<>();
+
+        roots.forEach(root->{
+            tree.add(Category.copy(root));
+            Set<Category> children = root.getChildren();
+
+            children.forEach(child->{
+                String name = "--" + child.getName();
+                tree.add(Category.copy(child, name));
+                getChildrenForListing(tree, child, 1);
+            });
+        });
+        return tree;
+    }
+
+    private void getChildrenForListing(List<Category> tree, Category parent, int level){
+        Set<Category> children = parent.getChildren();
+        int newLevel = level + 1;
+        children.forEach(child->{
+            String prefix = "";
+            for (int i = 0; i < newLevel; i++) {
+                prefix += "--";
+            }
+            tree.add(Category.copy(child, prefix + child.getName()));
+
+            getChildrenForListing(tree, child, newLevel);
+        });
     }
 
 
-    public List<Category> listCategoryByTree() {
+    public List<Category> listCategoryByTreeInForm() {
         List<Category> tree = new ArrayList<>();
 
         List<Category> categoryList = (List<Category>) categoryRepository.findAll();

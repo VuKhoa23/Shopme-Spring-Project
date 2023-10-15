@@ -76,7 +76,7 @@
               <a th:href="@{'/categories/edit/' + ${category.id}}">
                 <i class="fas fa-edit fa-2x green-icon"></i>
               </a>
-              <a class="delete-link" th:href="@{'/categories/delete/' + ${category.id}}" th:categoryid="${category.id}">
+              <a class="delete-link" th:href="@{'/categories/delete/' + ${category.id}}" th:categoryId="${category.id}">
                 <i class="fas fa-trash fa-2x red-icon"></i>
               </a>
             </td>
@@ -116,9 +116,9 @@
       $(".delete-link").on('click', function (e) {
         e.preventDefault();
         url = $(this).attr("href");
-        userId = $(this).attr("userid")
+        categoryId = $(this).attr("categoryId")
         $("#confirm-link").attr("href", url)
-        $("#confirmBody").text(`Are you sure you want to delete user ${userId} ?`);
+        $("#confirmBody").text(`Are you sure you want to delete category ${categoryId} ?`);
         $("#modalConfirm").modal();
       });
 

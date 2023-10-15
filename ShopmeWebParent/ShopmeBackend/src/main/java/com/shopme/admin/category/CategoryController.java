@@ -33,7 +33,7 @@ public class CategoryController {
         model.addAttribute("category", new Category());
         model.addAttribute("pageTitle", "New category");
 
-        List<Category> categoryList = categoryService.listCategoryByTree();
+        List<Category> categoryList = categoryService.listCategoryByTreeInForm();
         model.addAttribute("categories", categoryList);
 
         return "categories/categories-form";

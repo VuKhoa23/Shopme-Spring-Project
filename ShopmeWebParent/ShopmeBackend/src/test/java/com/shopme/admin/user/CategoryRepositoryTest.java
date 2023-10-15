@@ -93,4 +93,11 @@ public class CategoryRepositoryTest {
             printChildren(child, newLevel);
         }
     }
+
+    @Test
+    public void getRootCategories(){
+        for (Category category : categoryRepository.listRootCategories()) {
+            System.out.println(category.getName());
+        }
+    }
 }
