@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragments :: head('Categories Listing - Shopme Admin')">
+
+<body>
+  <div class="container-fluid">
+    <div th:replace="fragments :: header-nav-bar" />
+
+    <div class="mb-2 ">
+      <h1>Manage Categories</h1>
+      <a th:href="@{/categories/new}" title="Create User" class="user-p">
+        <i class="fas fa-folder-plus fa-3x gray-icon" aria-hidden="true"></i>
+      </a>
+      &nbsp;&nbsp;
+      <a th:href="@{/categories/export/csv}" title="Export CSV File">
+        <i class="fas fa-file-csv fa-3x gray-icon"></i>
+      </a>
+      &nbsp;&nbsp;
+      <a th:href="@{/categories/export/excel}" title="Export Excel File">
+        <i class="fas fa-file-excel fa-3x gray-icon"></i>
+      </a>
+      &nbsp;&nbsp;
+      <a th:href="@{/categories/export/pdf}" title="Export PDF File">
+        <i class="fas fa-file-pdf fa-3x gray-icon"></i>
+      </a>
+    </div>
+
+    <!-- search form -->
+
+    <div class="mb-2 ">
+      <form th:action="@{/categories/page/1}" class="form-inline" method="GET">
+        <input type=hidden name="sortField" th:value="${sortField}" />
+        <input type=hidden name="sortOrder" th:value="${sortOrder}" />
+        Filter:&nbsp;
+        <input class="form-control" type="search" name="keyWord" required />
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary fas fa-search"></button>
+        &nbsp;&nbsp;
+        <button type="button" onclick="clearFilter()" class="btn btn-secondary fas fa-eraser"></button>
+      </form>
+    </div>
+
+    <div th:if="${message} != null">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        [[${message}]]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <!-- Large screen -->
+    <div class="large-screen">
+      <table class="table table-bordered table-striped table-hover table-responsive-xl">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Category Image</th>
+            <th>Category name</th>
+            <th>Alias</th>
+            <th>Enabled</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="category: ${categories}">
+            <td>[[${category.id}]]</td>
+            <td></td>
+            <td>[[${category.name}]]</td>
+            <td>[[${category.alias}]]</td>
+            <td class="text-center">
+              <a th:if="${category.enabled}==true" th:href="@{'/categorys/' + ${category.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable category"></a>
+              <a th:if="${category.enabled}==false" th:href="@{'/categorys/' + ${category.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable category"></a>
+            </td>
+            <td class="d-flex justify-content-around">
+              <a th:href="@{'/categories/edit/' + ${category.id}}">
+                <i class="fas fa-edit fa-2x green-icon"></i>
+              </a>
+              <a class="delete-link" th:href="@{'/categories/delete/' + ${category.id}}" th:categoryid="${category.id}">
+                <i class="fas fa-trash fa-2x red-icon"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+
+
+    <!-- Modal -->
+
+    <div class="modal fade text-center" id="modalConfirm">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="confirmTitle">Delete</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <span id="confirmBody">Are you sure to delete this category ?</span>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-success" href="" id="confirm-link">Yes</a>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div th:replace="fragments :: footer" />
+  </div>
+  <script>
+    $(document).ready(() => {
+      $(".delete-link").on('click', function (e) {
+        e.preventDefault();
+        url = $(this).attr("href");
+        userId = $(this).attr("userid")
+        $("#confirm-link").attr("href", url)
+        $("#confirmBody").text(`Are you sure you want to delete user ${userId} ?`);
+        $("#modalConfirm").modal();
+      });
+
+
+    });
+
+    function clearFilter() {
+      window.location = "[[@{/users}]]"
+    }
+  </script>
+</body>
+
+</html>
