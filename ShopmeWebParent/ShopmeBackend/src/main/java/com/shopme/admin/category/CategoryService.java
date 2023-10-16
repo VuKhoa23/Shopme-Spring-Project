@@ -2,16 +2,19 @@ package com.shopme.admin.category;
 
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.catalog.Catalog;
 import java.util.*;
 
 @Service
 @Transactional
 public class CategoryService {
+    public static final int ROOT_CATEGORIES_PER_PAGE = 4;
     @Autowired
     CategoryRepository categoryRepository;
 
@@ -24,7 +27,7 @@ public class CategoryService {
         }
     }
 
-    public List<Category> listAll(String sortOrder) {
+    public List<Category> listByPage(CategoryPageInfo info,int pageNum, String sortOrder) {
         Sort sort = Sort.by("name");
         if(sortOrder.equals("asc")){
             sort = sort.ascending();
@@ -32,7 +35,15 @@ public class CategoryService {
         else{
             sort = sort.descending();
         }
-        List<Category> roots = categoryRepository.listRootCategories(sort);
+
+        Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
+
+        Page<Category> pageOfRoots = categoryRepository.listRootCategories(pageable);
+        List<Category> roots = pageOfRoots.getContent();
+
+        info.setTotalElements(pageOfRoots.getTotalElements());
+        info.setTotalPages(pageOfRoots.getTotalPages());
+
         return listTree(roots, sortOrder);
     }
 
@@ -70,7 +81,7 @@ public class CategoryService {
     public List<Category> listCategoryByTreeInForm() {
         List<Category> tree = new ArrayList<>();
 
-        List<Category> categoryList = categoryRepository.listRootCategories(Sort.by("name").ascending());
+        List<Category> categoryList = categoryRepository.listRootCategoriesInForm(Sort.by("name").ascending());
         int level = 0;
         categoryList.forEach(cate -> {
             // Get child of top level categories

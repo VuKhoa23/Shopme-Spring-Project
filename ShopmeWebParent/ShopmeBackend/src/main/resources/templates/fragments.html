@@ -24,7 +24,7 @@
     <a class="text-white" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=' + ${fieldName} + '&sortOrder='+ ${sortField != fieldName ? 'asc' : reverseSortOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">[[${columnLabel}]]</a>
   </th>
 
-  <a th:fragment="pagination-link(pageNum, label)" class="page-link" th:href="@{'/users/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortOrder=' + ${sortOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">
+  <a th:fragment="pagination-link(url, pageNum, label)" class="page-link" th:href="@{${url}+'/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortOrder=' + ${sortOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">
     <!-- using fragments -->
     [[${label}]]
   </a>
@@ -107,6 +107,42 @@
   <div th:fragment="footer" class="text-center m-5">
     <p>Shopme Controler Panel - Powered by VuKhoa23</p>
   </div>
+
+
+  <div th:fragment="pagination(url, entityName)" th:remove="tag">
+    <div class="text-center ">
+      <span th:if="${totalItems} > 0">Showing [[${entityName}]] [[${start}]] to [[${end}]] of total [[${totalItems}]]</span>
+      <span th:unless="${totalItems} > 0">No [[${entityName}]] found</span>
+    </div>
+
+    <div th:if="${totalItems} > 0" id="paginationSection">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center  ">
+          <li class="page-item">
+            <a th:replace="fragments::pagination-link(${url}, '1', 'First')" />
+          </li>
+          <li th:class="${currentPageNum == 1 ? 'page-item disabled' : 'page-item '}">
+            <a th:replace="fragments::pagination-link(${url}, ${currentPageNum - 1}, 'Previous')" />
+          </li>
+          <!-- set dynamic class name -->
+          <li th:class="${currentPageNum != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a th:replace="fragments::pagination-link(${url}, ${i}, ${i})" />
+          </li>
+          <li th:class="${currentPageNum == totalPages ? 'page-item disabled' : 'page-item '}">
+            <a th:replace="fragments::pagination-link(${url}, ${currentPageNum + 1}, 'Next')" />
+          </li>
+          <li class="page-item">
+            <a th:replace="fragments::pagination-link(${url}, ${totalPages}, 'Last')" />
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+
 </body>
+
+
+
 
 </html>

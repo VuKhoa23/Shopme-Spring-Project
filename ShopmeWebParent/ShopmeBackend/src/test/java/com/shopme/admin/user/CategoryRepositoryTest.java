@@ -97,7 +97,7 @@ public class CategoryRepositoryTest {
 
     @Test
     public void getRootCategories(){
-        for (Category category : categoryRepository.listRootCategories(Sort.by("name").ascending())) {
+        for (Category category : categoryRepository.listRootCategoriesInForm(Sort.by("name").ascending())) {
             System.out.println(category.getName());
         }
     }

@@ -103,33 +103,7 @@
         </tbody>
       </table>
 
-      <div class="text-center ">
-        <span th:if="${totalItems} > 0">Showing users [[${start}]] to [[${end}]] of total [[${totalItems}]]</span>
-        <span th:unless="${totalItems} > 0">No users found</span>
-      </div>
-
-      <div th:if="${totalItems} > 0" id="paginationSection">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center  ">
-            <li class="page-item">
-              <a th:replace="fragments::pagination-link('1', 'First')" />
-            </li>
-            <li th:class="${currentPageNum == 1 ? 'page-item disabled' : 'page-item '}">
-              <a th:replace="fragments::pagination-link(${currentPageNum - 1}, 'Previous')" />
-            </li>
-            <!-- set dynamic class name -->
-            <li th:class="${currentPageNum != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
-              <a th:replace="fragments::pagination-link(${i}, ${i})" />
-            </li>
-            <li th:class="${currentPageNum == totalPages ? 'page-item disabled' : 'page-item '}">
-              <a th:replace="fragments::pagination-link(${currentPageNum + 1}, 'Next')" />
-            </li>
-            <li class="page-item">
-              <a th:replace="fragments::pagination-link(${totalPages}, 'Last')" />
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <div th:replace="fragments::pagination('/users', 'users')"></div>
     </div>
 
     <!-- Small screen -->
@@ -166,20 +140,20 @@
         <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-center flex-wrap  ">
             <li class="page-item">
-              <a th:replace="fragments::pagination-link('1', 'First')" />
+              <a th:replace="fragments::pagination-link('/users','1', 'First')" />
             </li>
             <li th:class="${currentPageNum == 1 ? 'page-item disabled' : 'page-item '}">
-              <a th:replace="fragments::pagination-link(${currentPageNum - 1}, 'Previous')" />
+              <a th:replace="fragments::pagination-link('/users',${currentPageNum - 1}, 'Previous')" />
             </li>
             <!-- set dynamic class name -->
             <li th:class="${currentPageNum != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
-              <a th:replace="fragments::pagination-link(${i}, ${i})" />
+              <a th:replace="fragments::pagination-link('/users',${i}, ${i})" />
             </li>
             <li th:class="${currentPageNum == totalPages ? 'page-item disabled' : 'page-item '}">
-              <a th:replace="fragments::pagination-link(${currentPageNum + 1}, 'Next')" />
+              <a th:replace="fragments::pagination-link('/users',${currentPageNum + 1}, 'Next')" />
             </li>
             <li class="page-item">
-              <a th:replace="fragments::pagination-link(${totalPages}, 'Last')" />
+              <a th:replace="fragments::pagination-link('/users',${totalPages}, 'Last')" />
             </li>
           </ul>
         </nav>

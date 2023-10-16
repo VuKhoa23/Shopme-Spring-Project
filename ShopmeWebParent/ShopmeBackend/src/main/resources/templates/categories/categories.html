@@ -58,7 +58,7 @@
             <th>Category Image</th>
             <th>
               <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
-              <a class="text-white" th:href="@{'/categories?sortOrder=' + ${reverseOrder}}">Category Name</a>
+              <a class="text-white" th:href="@{'/categories/page/' + ${currentPageNum} + '?sortOrder=' + ${reverseOrder}}">Category Name</a>
             </th>
             <th>Alias</th>
             <th>Enabled</th>
@@ -89,6 +89,7 @@
         </tbody>
       </table>
 
+      <div th:replace="fragments::pagination('/categories', 'root categories')"></div>
 
     </div>
 
