@@ -92,4 +92,23 @@ public class CategoryController {
         }
         return "redirect:/categories";
     }
+
+    @GetMapping("/categories/{id}/enabled/{enabled}")
+    public String setEnabled(Model model,
+                             @PathVariable("id") Integer id,
+                             @PathVariable("enabled") boolean enabled,
+                             RedirectAttributes redirectAttributes){
+        try{
+            Category category = categoryService.findById(id);
+            category.setEnabled(enabled);
+            categoryService.save(category);
+            redirectAttributes.addFlashAttribute("message", (enabled ? "Enabled" : "Disabled") + " category with " +
+                    "id: " + id);
+            return "redirect:/categories";
+
+        } catch (CategoryNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/categories";
+        }
+    }
 }

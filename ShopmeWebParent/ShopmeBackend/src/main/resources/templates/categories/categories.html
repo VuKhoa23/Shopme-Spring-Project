@@ -74,8 +74,8 @@
             <td>[[${category.name}]]</td>
             <td>[[${category.alias}]]</td>
             <td class="text-center">
-              <a th:if="${category.enabled}==true" th:href="@{'/categorys/' + ${category.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable category"></a>
-              <a th:if="${category.enabled}==false" th:href="@{'/categorys/' + ${category.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable category"></a>
+              <a th:if="${category.enabled}==true" th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable category"></a>
+              <a th:if="${category.enabled}==false" th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable category"></a>
             </td>
             <td class="d-flex justify-content-around">
               <a th:href="@{'/categories/edit/' + ${category.id}}">
