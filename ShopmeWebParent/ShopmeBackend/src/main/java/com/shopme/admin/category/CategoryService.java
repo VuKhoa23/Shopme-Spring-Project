@@ -143,4 +143,7 @@ public class CategoryService {
         return "OK";
     }
 
+    public void remove(Category category) {
+        categoryRepository.delete(category);
+    }
 }

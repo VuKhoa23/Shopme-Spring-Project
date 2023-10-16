@@ -111,4 +111,22 @@ public class CategoryController {
             return "redirect:/categories";
         }
     }
+
+    @GetMapping("/categories/delete/{id}")
+    public String deleteCategory(Model model,
+                             @PathVariable("id") Integer id,
+                             RedirectAttributes redirectAttributes){
+        try{
+            Category category = categoryService.findById(id);
+            categoryService.save(category);
+            categoryService.remove(category);
+            redirectAttributes.addFlashAttribute("message", "Deleted category with " +
+                    "id: " + id);
+            return "redirect:/categories";
+
+        } catch (CategoryNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/categories";
+        }
+    }
 }
