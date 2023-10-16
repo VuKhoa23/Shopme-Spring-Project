@@ -1,8 +1,10 @@
-package com.shopme.admin.category;
+package com.shopme.admin.category.controller;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.category.CategoryNotFoundException;
+import com.shopme.admin.category.CategoryService;
 import com.shopme.common.entity.Category;
-import org.apache.tomcat.util.http.fileupload.FileUpload;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Controller
 public class CategoryController {
+
     @Autowired
     CategoryService categoryService;
     @GetMapping("/categories")
@@ -27,7 +30,6 @@ public class CategoryController {
 
     @GetMapping("/categories/new")
     public String showForm(Model model){
-
         model.addAttribute("category", new Category());
         model.addAttribute("pageTitle", "New category");
 

@@ -51,6 +51,12 @@ public class Category {
     public Category() {
     }
 
+    public Category(Integer id, String name, String alias) {
+        this.id = id;
+        this.name = name;
+        this.alias = alias;
+    }
+
     public Category(String name, String alias, String image, boolean enabled, Category parent, Set<Category> children) {
         this.name = name;
         this.alias = alias;
@@ -137,7 +143,7 @@ public class Category {
 
     @Transient
     public String getImagePath(){
-        if(image.isEmpty()){
+        if(image == null || image.isEmpty()){
             return "/images/empty.jpg";
         }
         return "/categories-images/" + this.id + "/" + this.image;

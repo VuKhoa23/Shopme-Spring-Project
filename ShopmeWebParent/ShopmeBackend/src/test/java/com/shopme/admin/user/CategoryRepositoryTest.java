@@ -100,4 +100,18 @@ public class CategoryRepositoryTest {
             System.out.println(category.getName());
         }
     }
+
+    @Test
+    public void findByName(){
+        Category category = categoryRepository.findByName("Computers");
+        System.out.println(category.getId());
+        assertThat(category).isNotNull();
+    }
+
+    @Test
+    public void findByAlias(){
+        Category category = categoryRepository.findByAlias("computers");
+        System.out.println(category.getId());
+        assertThat(category).isNotNull();
+    }
 }

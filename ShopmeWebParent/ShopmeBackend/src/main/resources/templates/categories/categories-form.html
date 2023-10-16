@@ -10,8 +10,7 @@
       <a th:href="@{/categories}">Back to categories listing</a>
     </div>
 
-    <form th:action="@{/categories/save}" method="POST" style="max-width: 700px; margin: 0 auto" th:object="${category}" enctype="multipart/form-data">
-      <!-- hidden field for id to edit and check email uniqueness -->
+    <form th:action="@{/categories/save}" method="POST" style="max-width: 700px; margin: 0 auto" th:object="${category}" enctype="multipart/form-data" onsubmit="return checkUnique(this)">
       <input type="hidden" th:field="*{id}" />
 
       <div class="border border-secondary rounded p-3">
@@ -97,6 +96,31 @@
       $("#modalTitle").text(title);
       $("#modalBody").text(message);
       $("#modalDialog").modal();
+    }
+
+    function checkUnique(form) {
+      cateId = $("#id").val();
+      cateName = $("#name").val();
+      cateAlias = $("#alias").val();
+      csrf_token = $("input[name='_csrf']").val();
+
+      url = "[[@{/categories/check-unique}]]";
+
+      params = { id: cateId, name: cateName, alias: cateAlias, _csrf: csrf_token };
+
+
+      $.post(url, params, (response) => {
+        if (response === "OK") {
+          form.submit();
+        } else {
+          showModalDialog("Warn", response);
+        }
+      }).fail(function () {
+        alert('failed')
+      })
+
+      return false;
+
     }
 
     // global variable that will be directed to when click the cancel button

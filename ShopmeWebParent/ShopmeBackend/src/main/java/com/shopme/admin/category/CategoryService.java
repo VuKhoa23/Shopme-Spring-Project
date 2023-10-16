@@ -94,4 +94,32 @@ public class CategoryService {
     public Category save(Category category){
         return categoryRepository.save(category);
     }
+
+    public String checkUnique(Integer id, String name, String alias){
+        boolean isCreatingNew = (id == null || id == 0);
+        Category categoryByName = categoryRepository.findByName(name);
+
+        if(isCreatingNew){
+            if(categoryByName != null){
+                return "DuplicateName";
+            }
+            else{
+                Category categoryByAlias = categoryRepository.findByAlias(alias);
+                if(categoryByAlias != null){
+                    return "DuplicateAlias";
+                }
+            }
+        }
+        else{
+            if(categoryByName != null && categoryByName.getId().intValue() != id){
+                return "DuplicateName";
+            }
+            if(categoryRepository.findByAlias(alias) != null && categoryRepository.findByAlias(alias).getId().intValue() != id){
+                return "DuplicateAlias";
+            }
+        }
+
+        return "OK";
+    }
+
 }
