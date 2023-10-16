@@ -56,7 +56,10 @@
           <tr>
             <th>ID</th>
             <th>Category Image</th>
-            <th>Category name</th>
+            <th>
+              <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+              <a class="text-white" th:href="@{'/categories?sortOrder=' + ${reverseOrder}}">Category Name</a>
+            </th>
             <th>Alias</th>
             <th>Enabled</th>
             <th>Action</th>

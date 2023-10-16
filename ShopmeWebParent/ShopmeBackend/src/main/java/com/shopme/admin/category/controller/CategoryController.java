@@ -22,9 +22,21 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
     @GetMapping("/categories")
-    public String listAll(Model model){
+    public String listAll(Model model,
+                          @RequestParam(name="sortOrder", required = false) String sortOrder){
         // list categories in hierachical form
-        model.addAttribute("categories", categoryService.listAll());
+        if(sortOrder == null || sortOrder.isEmpty()){
+            sortOrder = "asc";
+        }
+        model.addAttribute("categories", categoryService.listAll(sortOrder));
+        if(sortOrder.equals("asc")){
+            model.addAttribute("reverseOrder", "desc");
+        }
+        else{
+            model.addAttribute("reverseOrder", "asc");
+
+        }
+        model.addAttribute("sortOrder", sortOrder);
         return "categories/categories";
     }
 
