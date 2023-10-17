@@ -21,40 +21,52 @@ public class CategoryService {
     public Category findById(Integer id) throws CategoryNotFoundException {
         try {
             return categoryRepository.findById(id).get();
-        }
-        catch(NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             throw new CategoryNotFoundException("No such category");
         }
     }
 
-    public List<Category> listByPage(CategoryPageInfo info,int pageNum, String sortOrder) {
+    public List<Category> listByPage(CategoryPageInfo info, int pageNum, String sortOrder, String keyWord) {
         Sort sort = Sort.by("name");
-        if(sortOrder.equals("asc")){
+        if (sortOrder.equals("asc")) {
             sort = sort.ascending();
-        }
-        else{
+        } else {
             sort = sort.descending();
         }
 
         Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
 
-        Page<Category> pageOfRoots = categoryRepository.listRootCategories(pageable);
-        List<Category> roots = pageOfRoots.getContent();
+        Page<Category> pageOfRoots = null;
+
+        if (keyWord != null && !keyWord.isEmpty()) {
+            pageOfRoots = categoryRepository.search(keyWord, pageable);
+            System.out.println("Yes");
+        } else {
+            System.out.println("No");
+            pageOfRoots = categoryRepository.listRootCategories(pageable);
+        }
 
         info.setTotalElements(pageOfRoots.getTotalElements());
         info.setTotalPages(pageOfRoots.getTotalPages());
 
-        return listTree(roots, sortOrder);
+        if (keyWord != null && !keyWord.isEmpty()) {
+            List<Category> searchResults = pageOfRoots.getContent();
+            searchResults.forEach(System.out::println);
+            return searchResults;
+        } else {
+            List<Category> roots = pageOfRoots.getContent();
+            return listTree(roots, sortOrder);
+        }
     }
 
-    private List<Category> listTree(List<Category> roots, String sortOrder){
+    private List<Category> listTree(List<Category> roots, String sortOrder) {
         List<Category> tree = new ArrayList<>();
 
-        roots.forEach(root->{
+        roots.forEach(root -> {
             tree.add(Category.copy(root));
             Set<Category> children = sortedChildren(root.getChildren(), sortOrder);
 
-            children.forEach(child->{
+            children.forEach(child -> {
                 String name = "--" + child.getName();
                 tree.add(Category.copy(child, name));
                 getChildrenForListing(tree, child, 1, sortOrder);
@@ -63,10 +75,10 @@ public class CategoryService {
         return tree;
     }
 
-    private void getChildrenForListing(List<Category> tree, Category parent, int level, String sortOrder){
+    private void getChildrenForListing(List<Category> tree, Category parent, int level, String sortOrder) {
         Set<Category> children = sortedChildren(parent.getChildren(), sortOrder);
         int newLevel = level + 1;
-        children.forEach(child->{
+        children.forEach(child -> {
             String prefix = "";
             for (int i = 0; i < newLevel; i++) {
                 prefix += "--";
@@ -94,7 +106,7 @@ public class CategoryService {
         return tree;
     }
 
-    private void getChildren(List<Category>  tree, Category parent, int level, String sortOrder) {
+    private void getChildren(List<Category> tree, Category parent, int level, String sortOrder) {
         int newLevel = level + 1;
         Set<Category> children = sortedChildren(parent.getChildren(), sortOrder);
 
@@ -108,13 +120,13 @@ public class CategoryService {
         }
     }
 
-    private SortedSet<Category> sortedChildren(Set<Category> children, String sortOrder){
+    private SortedSet<Category> sortedChildren(Set<Category> children, String sortOrder) {
         SortedSet<Category> sorted = new TreeSet<>(new Comparator<Category>() {
             @Override
             public int compare(Category o1, Category o2) {
-                if(sortOrder.equals("asc")) {
+                if (sortOrder.equals("asc")) {
                     return o1.getName().compareTo(o2.getName());
-                }else{
+                } else {
                     return o2.getName().compareTo(o1.getName());
                 }
             }
@@ -123,30 +135,28 @@ public class CategoryService {
         return sorted;
     }
 
-    public Category save(Category category){
+    public Category save(Category category) {
         return categoryRepository.save(category);
     }
 
-    public String checkUnique(Integer id, String name, String alias){
+    public String checkUnique(Integer id, String name, String alias) {
         boolean isCreatingNew = (id == null || id == 0);
         Category categoryByName = categoryRepository.findByName(name);
 
-        if(isCreatingNew){
-            if(categoryByName != null){
+        if (isCreatingNew) {
+            if (categoryByName != null) {
                 return "DuplicateName";
-            }
-            else{
+            } else {
                 Category categoryByAlias = categoryRepository.findByAlias(alias);
-                if(categoryByAlias != null){
+                if (categoryByAlias != null) {
                     return "DuplicateAlias";
                 }
             }
-        }
-        else{
-            if(categoryByName != null && categoryByName.getId().intValue() != id){
+        } else {
+            if (categoryByName != null && categoryByName.getId().intValue() != id) {
                 return "DuplicateName";
             }
-            if(categoryRepository.findByAlias(alias) != null && categoryRepository.findByAlias(alias).getId().intValue() != id){
+            if (categoryRepository.findByAlias(alias) != null && categoryRepository.findByAlias(alias).getId().intValue() != id) {
                 return "DuplicateAlias";
             }
         }

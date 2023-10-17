@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
@@ -114,5 +117,18 @@ public class CategoryRepositoryTest {
         Category category = categoryRepository.findByAlias("computers");
         System.out.println(category.getId());
         assertThat(category).isNotNull();
+    }
+
+    @Test
+    public void testPagingWithKeyWord(){
+        Sort sort = Sort.by("name");
+        sort = sort.ascending();
+        Pageable pageable = PageRequest.of(0, 4, sort);
+
+        Page<Category> page = categoryRepository.search("Com", pageable);
+        List<Category> list = page.getContent();
+        for (Category category : list) {
+            System.out.println(category.getName());
+        }
     }
 }

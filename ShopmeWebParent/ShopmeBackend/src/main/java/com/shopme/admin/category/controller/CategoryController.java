@@ -26,14 +26,16 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public String listAll(Model model,
-                          @RequestParam(name = "sortOrder", required = false) String sortOrder) {
-        return listByPage(1, model, sortOrder);
+                          @RequestParam(name = "sortOrder", required = false) String sortOrder,
+                          @RequestParam(name ="keyWord", required = false) String keyWord) {
+        return listByPage(1, model, sortOrder, keyWord);
     }
 
     @GetMapping("/categories/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum,
                              Model model,
-                             @RequestParam(name = "sortOrder", required = false) String sortOrder) {
+                             @RequestParam(name = "sortOrder", required = false) String sortOrder,
+                             @RequestParam(name = "keyWord", required = false) String keyWord) {
         // list categories in hierachical form
         if (sortOrder == null || sortOrder.isEmpty()) {
             sortOrder = "asc";
@@ -51,10 +53,10 @@ public class CategoryController {
         long start = (pageNum - 1) * CategoryService.ROOT_CATEGORIES_PER_PAGE + 1;
         long end = start + CategoryService.ROOT_CATEGORIES_PER_PAGE - 1;
 
-        if(end > info.getTotalElements()){
+        model.addAttribute("categories", categoryService.listByPage(info, pageNum, sortOrder, keyWord));
+        if (end > info.getTotalElements()) {
             end = info.getTotalElements();
         }
-        model.addAttribute("categories", categoryService.listByPage(info, pageNum, sortOrder));
         model.addAttribute("totalPages", info.getTotalPages());
         model.addAttribute("totalItems", info.getTotalElements());
         model.addAttribute("currentPageNum", pageNum);
@@ -62,6 +64,7 @@ public class CategoryController {
         model.addAttribute("start", start);
         model.addAttribute("end", end);
         model.addAttribute("sortField", "name");
+        model.addAttribute("keyWord", keyWord);
         return "categories/categories";
 
     }

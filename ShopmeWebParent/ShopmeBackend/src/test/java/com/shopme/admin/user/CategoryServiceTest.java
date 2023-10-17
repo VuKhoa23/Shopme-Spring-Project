@@ -1,5 +1,6 @@
 package com.shopme.admin.user;
 
+import com.shopme.admin.category.CategoryPageInfo;
 import com.shopme.admin.category.CategoryRepository;
 import com.shopme.admin.category.CategoryService;
 import com.shopme.common.entity.Category;
@@ -9,7 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -141,5 +148,7 @@ public class CategoryServiceTest {
 
         assertThat(result).isEqualTo("OK");
     }
+
+
 
 }
