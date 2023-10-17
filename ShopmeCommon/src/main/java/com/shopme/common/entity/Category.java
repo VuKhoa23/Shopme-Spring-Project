@@ -19,11 +19,11 @@ public class Category {
     private String image;
     private boolean enabled;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     private Set<Category> children = new HashSet<>();
 
     public static Category copy(Category category){
