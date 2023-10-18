@@ -42,7 +42,7 @@
       </div>
     </div>
     <!-- Large screen -->
-    <div class="large-screen">
+    <div class="categories-large-screen">
       <table class="table table-bordered table-striped table-hover table-responsive-xl">
         <thead class="thead-dark">
           <tr>
@@ -70,6 +70,96 @@
               <a th:if="${category.enabled}==false" th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable category"></a>
             </td>
             <td class="d-flex justify-content-around">
+              <a th:href="@{'/categories/edit/' + ${category.id}}">
+                <i class="fas fa-edit fa-2x green-icon"></i>
+              </a>
+              <a class="delete-link" th:href="@{'/categories/delete/' + ${category.id}}" th:categoryId="${category.id}">
+                <i class="fas fa-trash fa-2x red-icon"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div th:if="${keyWord == null}">
+        <div th:replace="fragments::pagination('/categories', 'root categories')"></div>
+      </div>
+      <div th:if="${keyWord != null}">
+        <div th:replace="fragments::pagination('/categories', 'found categories')"></div>
+        <p class="text-center ">Found categories will not be listed in tree structure</p>
+      </div>
+
+    </div>
+
+    <div class="categories-medium-screen">
+      <table class="table table-bordered table-striped table-hover table-responsive-xl">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Category Image</th>
+            <th>
+              <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+              <a class="text-white" th:href="@{'/categories/page/' + ${currentPageNum} + '?sortOrder=' + ${reverseOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">Category Name</a>
+            </th>
+            <th>Enabled</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="category: ${categories}">
+            <td>[[${category.id}]]</td>
+            <td>
+              <img th:src="@{${category.imagePath}}" />
+            </td>
+            <td>[[${category.name}]]</td>
+            <td class="text-center">
+              <a th:if="${category.enabled}==true" th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable category"></a>
+              <a th:if="${category.enabled}==false" th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable category"></a>
+            </td>
+            <td class="d-flex justify-content-around">
+              <a th:href="@{'/categories/edit/' + ${category.id}}">
+                <i class="fas fa-edit fa-2x green-icon"></i>
+              </a>
+              <a class="delete-link" th:href="@{'/categories/delete/' + ${category.id}}" th:categoryId="${category.id}">
+                <i class="fas fa-trash fa-2x red-icon"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div th:if="${keyWord == null}">
+        <div th:replace="fragments::pagination('/categories', 'root categories')"></div>
+      </div>
+      <div th:if="${keyWord != null}">
+        <div th:replace="fragments::pagination('/categories', 'found categories')"></div>
+        <p class="text-center ">Found categories will not be listed in tree structure</p>
+      </div>
+
+    </div>
+
+    <div class="categories-small-screen">
+      <table class="table table-bordered table-striped table-hover table-responsive-xl">
+        <thead class="thead-dark">
+          <tr>
+            <th>Category Image</th>
+            <th>
+              <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+              <a class="text-white" th:href="@{'/categories/page/' + ${currentPageNum} + '?sortOrder=' + ${reverseOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}"> Sort Category Name</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="category: ${categories}">
+            <td>
+              <img style="width: 100px;" th:src="@{${category.imagePath}}" />
+            </td>
+            <td class="text-center">
+
+              <p>[[${category.name}]]</p>
+
+              <a th:if="${category.enabled}==true" th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable category"></a>
+              <a th:if="${category.enabled}==false" th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable category"></a>
               <a th:href="@{'/categories/edit/' + ${category.id}}">
                 <i class="fas fa-edit fa-2x green-icon"></i>
               </a>
