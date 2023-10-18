@@ -4,9 +4,11 @@ import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.category.CategoryNotFoundException;
 import com.shopme.admin.category.CategoryPageInfo;
 import com.shopme.admin.category.CategoryService;
-import com.shopme.admin.user.UserService;
+import com.shopme.admin.category.exporter.CategoryCsvExporter;
+import com.shopme.admin.user.exporter.UserCsvExporter;
 import com.shopme.common.entity.Category;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -74,7 +76,7 @@ public class CategoryController {
         model.addAttribute("category", new Category());
         model.addAttribute("pageTitle", "New category");
 
-        List<Category> categoryList = categoryService.listCategoryByTreeInForm();
+        List<Category> categoryList = categoryService.listCategoryByTreeInForm("--");
         model.addAttribute("categories", categoryList);
 
         return "categories/categories-form";
@@ -86,7 +88,7 @@ public class CategoryController {
         try {
             Category category = categoryService.findById(id);
             model.addAttribute("pageTitle", "New category");
-            List<Category> categoryList = categoryService.listCategoryByTreeInForm();
+            List<Category> categoryList = categoryService.listCategoryByTreeInForm("--");
 
             model.addAttribute("category", category);
             model.addAttribute("categories", categoryList);
@@ -153,6 +155,18 @@ public class CategoryController {
         } catch (CategoryNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
             return "redirect:/categories";
+        }
+    }
+
+    @GetMapping("categories/export/csv")
+    public void exportToCSV(HttpServletResponse response){
+        List<Category> categories = categoryService.listCategoryByTreeInForm("      ");
+
+        CategoryCsvExporter exporter = new CategoryCsvExporter();
+        try {
+            exporter.export(categories, response);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

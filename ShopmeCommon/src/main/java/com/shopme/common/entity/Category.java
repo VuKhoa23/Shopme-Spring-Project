@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,6 +70,7 @@ public class Category {
         this.id = id;
         this.name = name;
     }
+
 
     public Category(String name, String alias, String image) {
         this.name = name;

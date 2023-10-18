@@ -90,7 +90,7 @@ public class CategoryService {
     }
 
 
-    public List<Category> listCategoryByTreeInForm() {
+    public List<Category> listCategoryByTreeInForm(String prefix) {
         List<Category> tree = new ArrayList<>();
 
         List<Category> categoryList = categoryRepository.listRootCategoriesInForm(Sort.by("name").ascending());
@@ -98,25 +98,26 @@ public class CategoryService {
         categoryList.forEach(cate -> {
             // Get child of top level categories
             if (cate.getParent() == null) {
-                tree.add(new Category(cate.getId(), cate.getName()));
-                getChildren(tree, cate, level, "asc");
+                // get alias for csv exporter
+                tree.add(new Category(cate.getId(), cate.getName(), cate.getAlias()));
+                getChildren(tree, cate, level, "asc", prefix);
             }
         });
 
         return tree;
     }
 
-    private void getChildren(List<Category> tree, Category parent, int level, String sortOrder) {
+    private void getChildren(List<Category> tree, Category parent, int level, String sortOrder, String prefix) {
         int newLevel = level + 1;
         Set<Category> children = sortedChildren(parent.getChildren(), sortOrder);
 
         for (Category child : children) {
-            String prefix = "";
+            String thePrefix = "";
             for (int i = 0; i < newLevel; i++) {
-                prefix += "--";
+                thePrefix += prefix;
             }
-            tree.add(new Category(child.getId(), prefix + child.getName()));
-            getChildren(tree, child, newLevel, sortOrder);
+            tree.add(new Category(child.getId(), thePrefix + child.getName(), child.getAlias()));
+            getChildren(tree, child, newLevel, sortOrder, prefix);
         }
     }
 
