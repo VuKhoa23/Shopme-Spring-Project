@@ -60,7 +60,7 @@ public class WebSecurityConfig {
                 .formLogin(form -> {
                     form.loginPage("/login")
                             .usernameParameter("email")
-                            .defaultSuccessUrl("/")
+                            .defaultSuccessUrl("/users")
                             .permitAll();
                 })
                 .logout(configurer -> {
