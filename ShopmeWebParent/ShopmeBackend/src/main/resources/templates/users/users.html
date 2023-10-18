@@ -56,20 +56,20 @@
           <tr>
             <th class="hideable-column">
               <!-- if the remove tag is 'tag', thymeleaf will delete the parent tag in the fragments.html code -->
-              <th th:replace="fragments :: column-link('id', 'User ID', 'tag')" />
+              <th th:replace="fragments :: column-link('id', 'User ID', 'tag', '/users/')" />
             </th>
             <th>
               Photo
             </th>
             <th class="hideable-column">
-              <th th:replace="fragments :: column-link('email', 'Email', 'tag')" />
+              <th th:replace="fragments :: column-link('email', 'Email', 'tag', '/users/page/')" />
             </th>
-            <th th:replace="fragments :: column-link('firstName', 'First Name', 'none')" />
-            <th th:replace="fragments :: column-link('lastName', 'Last Name', 'none')" />
+            <th th:replace="fragments :: column-link('firstName', 'First Name', 'none', '/users/page/')" />
+            <th th:replace="fragments :: column-link('lastName', 'Last Name', 'none', '/users/page/')" />
             <th>
               Roles
             </th>
-            <th th:replace="fragments :: column-link('enabled', 'Enabled', 'none')" />
+            <th th:replace="fragments :: column-link('enabled', 'Enabled', 'none', '/users/page/')" />
             <th>
               Actions
             </th>
@@ -88,16 +88,11 @@
             <td>[[${user.lastName}]]</td>
             <td>[[${user.roles}]]</td>
             <td class="text-center">
-              <a th:if="${user.enabled}==true" th:href="@{'/users/' + ${user.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable user"></a>
-              <a th:if="${user.enabled}==false" th:href="@{'/users/' + ${user.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable user"></a>
+              <td th:replace="fragments::enabled-status(${user.enabled}, '/users/', ${user.id}, 'user')" />
             </td>
             <td class="d-flex justify-content-around">
-              <a th:href="@{'/users/edit/' + ${user.id}}">
-                <i class="fas fa-edit fa-2x green-icon"></i>
-              </a>
-              <a class="delete-link" th:href="@{'/users/delete/' + ${user.id}}" th:userid="${user.id}">
-                <i class="fas fa-trash fa-2x red-icon"></i>
-              </a>
+              <a th:replace="fragments::edit('user', ${user.id}, '/users/')" />
+              <a th:replace="fragments::delete('user', ${user.id}, '/users/')" />
             </td>
           </tr>
         </tbody>
@@ -118,15 +113,10 @@
           <div>[[${user.firstName + ' ' + user.lastName}]]</div>
           <div>[[${user.roles}]]</div>
           <div>
-            <a th:if="${user.enabled}==true" th:href="@{'/users/' + ${user.id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" title="Disable user"></a>
-            <a th:if="${user.enabled}==false" th:href="@{'/users/' + ${user.id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" title="Enable user"></a>
+            <td th:replace="fragments::enabled-status(${user.enabled}, '/users/', ${user.id}, 'user')" />
 
-            <a th:href="@{'/users/edit/' + ${user.id}}">
-              <i class="fas fa-edit fa-2x green-icon"></i>
-            </a>
-            <a class="delete-link" th:href="@{'/users/delete/' + ${user.id}}" th:userid="${user.id}">
-              <i class="fas fa-trash fa-2x red-icon"></i>
-            </a>
+            <a th:replace="fragments::edit('user', ${user.id}, '/users/')" />
+            <a th:replace="fragments::delete('user', ${user.id}, '/users/')" />
           </div>
         </div>
       </div>
@@ -188,7 +178,7 @@
       $(".delete-link").on('click', function (e) {
         e.preventDefault();
         url = $(this).attr("href");
-        userId = $(this).attr("userid")
+        userId = $(this).attr("deleteId")
         $("#confirm-link").attr("href", url)
         $("#confirmBody").text(`Are you sure you want to delete user ${userId} ?`);
         $("#modalConfirm").modal();

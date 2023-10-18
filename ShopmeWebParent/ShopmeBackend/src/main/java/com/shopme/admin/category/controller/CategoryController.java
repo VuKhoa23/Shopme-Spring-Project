@@ -46,9 +46,9 @@ public class CategoryController {
         CategoryPageInfo info = new CategoryPageInfo();
 
         if (sortOrder.equals("asc")) {
-            model.addAttribute("reverseOrder", "desc");
+            model.addAttribute("reverseSortOrder", "desc");
         } else {
-            model.addAttribute("reverseOrder", "asc");
+            model.addAttribute("reverseSortOrder", "asc");
 
         }
 

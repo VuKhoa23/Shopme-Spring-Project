@@ -18,15 +18,33 @@
 <body>
 
   <!-- if removeTag == "tag", thymeleaf will delete the parent <th> tag, which is the <th> tag below, and use the our parent tag with class "hideable-column" which we defined in users.html-->
-  <th th:fragment="column-link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+  <th th:fragment="column-link(fieldName, columnLabel, removeTag, url)" th:remove="${removeTag}">
     <span th:if="${sortField == fieldName}" th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
     <!-- if the col is first time clicked for sorting, the default is asc, else keep reversing it -->
-    <a class="text-white" th:href="@{'/users/page/' + ${currentPageNum} + '?sortField=' + ${fieldName} + '&sortOrder='+ ${sortField != fieldName ? 'asc' : reverseSortOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">[[${columnLabel}]]</a>
+    <a class="text-white" th:href="@{${url} + ${currentPageNum} + '?sortField=' + ${fieldName} + '&sortOrder='+ ${sortField != fieldName ? 'asc' : reverseSortOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">[[${columnLabel}]]</a>
   </th>
 
   <a th:fragment="pagination-link(url, pageNum, label)" class="page-link" th:href="@{${url}+'/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortOrder=' + ${sortOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">
     <!-- using fragments -->
     [[${label}]]
+  </a>
+
+  <!-- enabled status -->
+  <td th:fragment="enabled-status(enabled, url, id, entityName)" th:remove="tag">
+    <a th:if="${enabled}==true" th:href="@{${url} + ${id} + '/enabled/false'}" class="fa fa-check-circle green-icon" aria-hidden="true" th:title="Disable +  ${' '} + ${entityName}"></a>
+    <a th:if="${enabled}==false" th:href="@{${url} + ${id} + '/enabled/true'}" class="fa fa-check-circle gray-icon" aria-hidden="true" th:title="Enable + ${' '} + ${entityName}"></a>
+  </td>
+
+  <!-- edit button -->
+
+  <a th:fragment="edit(entityName, id, url)" th:title="Edit + ${' ' + entityName}" th:href="@{${url} + 'edit/' + ${id}}">
+    <i class="fas fa-edit fa-2x green-icon"></i>
+  </a>
+
+  <!-- ddelete button -->
+
+  <a th:fragment="delete(entityName, id, url)" th:title="Delete + ${' ' + entityName}" th:href="@{${url} + 'delete/' + ${id}}" class="delete-link" th:deleteId="${id}">
+    <i class="fas fa-trash fa-2x red-icon"></i>
   </a>
 
   <!-- nav bar - header section -->
