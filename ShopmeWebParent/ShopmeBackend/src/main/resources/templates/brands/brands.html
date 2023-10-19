@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragments :: head('Brands Listing - Shopme Admin')">
+
+<body>
+  <div class="container-fluid">
+    <div th:replace="fragments :: header-nav-bar" />
+
+    <div class="mb-2 ">
+      <h1>Manage Brands</h1>
+      <a th:href="@{/brands/new}" title="Create Brand" class="user-p">
+        <i class="fas fa-folder-plus fa-3x gray-icon" aria-hidden="true"></i>
+      </a>
+      &nbsp;&nbsp;
+      <a th:href="@{/brands/export/csv}" title="Export CSV File">
+        <i class="fas fa-file-csv fa-3x gray-icon"></i>
+      </a>
+    </div>
+
+    <!-- search form -->
+
+    <div class="mb-2 ">
+      <form th:action="@{/brands/page/1}" class="form-inline" method="GET">
+        <input type=hidden name="sortField" th:value="${sortField}" />
+        <input type=hidden name="sortOrder" th:value="${sortOrder}" />
+        Filter:&nbsp;
+        <input class="form-control" type="search" name="keyWord" required />
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary fas fa-search"></button>
+        &nbsp;&nbsp;
+        <button type="button" onclick="clearFilter()" class="btn btn-secondary fas fa-eraser"></button>
+      </form>
+    </div>
+
+    <div th:if="${message} != null">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        [[${message}]]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <!-- Large screen -->
+    <div class="brands-large-screen">
+      <table class="table table-bordered table-striped table-hover table-responsive-xl">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Brand Logo</th>
+            <th>Brand name</th>
+            <th>Brand Categories</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="brand: ${brands}">
+            <td>[[${brand.id}]]</td>
+            <td>
+              Logo
+            </td>
+            <td>[[${brand.name}]]</td>
+            <td>
+              <span class="badge badge-secondary m-1 " th:each="category: ${brand.categories}">
+                [[${category.name}]]
+              </span>
+            </td>
+
+            <td class="d-flex justify-content-around">
+              <a th:replace="fragments::edit('brand', ${brand.id}, '/brands/')" />
+              <a th:replace="fragments::delete('brand', ${brand.id}, '/brands/')" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="text-center">
+        This will be pagination fragment
+      </div>
+
+    </div>
+
+    <!-- Modal -->
+
+    <div class="modal fade text-center" id="modalConfirm">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="confirmTitle">Delete</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <span id="confirmBody">Are you sure to delete this brand ?</span>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-success" href="" id="confirm-link">Yes</a>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div th:replace="fragments :: footer" />
+  </div>
+  <script>
+    $(document).ready(() => {
+      $(".delete-link").on('click', function (e) {
+        e.preventDefault();
+        url = $(this).attr("href");
+        brandId = $(this).attr("deleteId")
+        $("#confirm-link").attr("href", url)
+        $("#confirmBody").text(`Are you sure you want to delete brand ${brandId} ?`);
+        $("#modalConfirm").modal();
+      });
+
+
+    });
+
+    function clearFilter() {
+      window.location = "[[@{/brands}]]"
+    }
+  </script>
+</body>
+
+</html>
