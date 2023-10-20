@@ -71,4 +71,12 @@ public class Brand {
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
+
+    @Transient
+    public String getLogoPath(){
+        if(id == null || logo == null || logo.isEmpty()){
+            return "/images/default-logo.jpg";
+        }
+        return "/brands-logos/" + id + "/" + logo;
+    }
 }

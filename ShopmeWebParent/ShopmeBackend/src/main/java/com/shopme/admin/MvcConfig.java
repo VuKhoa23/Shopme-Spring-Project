@@ -30,5 +30,16 @@ public class MvcConfig implements WebMvcConfigurer {
         // wild card to accept all file under user-photos dir
         registry.addResourceHandler("/categories-images/**")
                 .addResourceLocations("file:/" + categoriesPhotosPath + "/");
+
+
+        WebMvcConfigurer.super.addResourceHandlers(registry);
+        //categories image is at the same level as front end and back end
+        String brandsDirName = "../brands-logos";
+        Path brandsPhotosDir = Paths.get(brandsDirName);
+
+        String brandsPhotosPath = brandsPhotosDir.toFile().getAbsolutePath();
+        // wild card to accept all file under user-photos dir
+        registry.addResourceHandler("/brands-logos/**")
+                .addResourceLocations("file:/" + brandsPhotosPath + "/");
     }
 }
