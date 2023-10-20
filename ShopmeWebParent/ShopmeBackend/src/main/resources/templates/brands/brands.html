@@ -57,7 +57,7 @@
           <tr th:each="brand: ${brands}">
             <td>[[${brand.id}]]</td>
             <td>
-              <img th:src="@{${brand.logoPath}}" />
+              <img style="width: 150px;" th:src="@{${brand.logoPath}}" />
             </td>
             <td>[[${brand.name}]]</td>
             <td>

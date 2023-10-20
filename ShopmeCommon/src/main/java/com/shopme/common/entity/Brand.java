@@ -13,7 +13,7 @@ public class Brand {
     private Integer id;
     @Column(nullable = false, length = 128, unique = true)
     private String name;
-    @Column(nullable = false, length = 128)
+    @Column(nullable = true, length = 128)
     private String logo;
 
     @ManyToMany(fetch = FetchType.EAGER)

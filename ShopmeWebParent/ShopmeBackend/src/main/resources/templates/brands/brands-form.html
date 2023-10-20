@@ -43,7 +43,7 @@
           <label class="col-sm-4 col-form-label">Category image</label>
           <div class="col-sm-8">
             <input type="hidden" th:field="*{logo}" />
-            <input class="mb-2" type="file" accept="image/png image/jpeg" id="image-input" name="imageInput" required />
+            <input class="mb-2" type="file" accept="image/png image/jpeg" id="image-input" name="imageInput" />
             <br />
             <!-- user-photos/${id}/...png is under the management of ResourceHandler in MVC config -->
             <img th:src="@{${brand.logoPath}}" alt="Brand logo" id="thumbnail" />
