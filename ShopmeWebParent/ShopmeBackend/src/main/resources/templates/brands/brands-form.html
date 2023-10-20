@@ -10,7 +10,7 @@
       <a th:href="@{/brands}">Back to brands listing</a>
     </div>
 
-    <form th:action="@{/brands/save}" method="POST" style="max-width: 700px; margin: 0 auto" th:object="${brand}" enctype="multipart/form-data">
+    <form th:action="@{/brands/save}" method="POST" style="max-width: 700px; margin: 0 auto" th:object="${brand}" enctype="multipart/form-data" onsubmit="return checkUnique(this)">
       <input type="hidden" th:field="*{id}" />
 
       <div class="border border-secondary rounded p-3">
@@ -102,6 +102,31 @@
       $("#modalTitle").text(title);
       $("#modalBody").text(message);
       $("#modalDialog").modal();
+    }
+
+    function checkUnique(form) {
+      brandId = $("#id").val();
+      brandName = $("#name").val();
+      csrf_token = $("input[name='_csrf']").val();
+
+      url = "[[@{/brands/check-unique}]]";
+
+      params = { id: brandId, name: brandName, _csrf: csrf_token };
+
+
+      $.post(url, params, (response) => {
+        if (response === "OK") {
+          form.submit();
+        }
+        else {
+          showModalDialog("Warn", response);
+        }
+      }).fail(function () {
+        alert('failed')
+      })
+
+      return false;
+
     }
 
 

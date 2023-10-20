@@ -101,4 +101,10 @@ public class BrandRepositoryTest {
         // samsung is in persistent context so no need to save it. Just set the name
         samsung.setName("Samsung Electronics");
     }
+
+    @Test
+    public void findByName(){
+        Brand samsung = brandRepository.findByName("Samsung Electronics");
+        System.out.println(samsung);
+    }
 }

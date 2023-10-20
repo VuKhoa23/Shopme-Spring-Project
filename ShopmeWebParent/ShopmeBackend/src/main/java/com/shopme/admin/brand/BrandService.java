@@ -1,4 +1,4 @@
-package com.shopme.admin.brand.controller;
+package com.shopme.admin.brand;
 
 import com.shopme.admin.brand.BrandNotFoundException;
 import com.shopme.admin.brand.BrandRepository;
@@ -16,7 +16,7 @@ public class BrandService {
     @Autowired
     private BrandRepository brandRepository;
 
-    List<Brand> listAll(){
+    public List<Brand> listAll(){
         return (List<Brand>) brandRepository.findAll();
     }
 
@@ -34,5 +34,15 @@ public class BrandService {
 
     public void remove(Brand brand) {
         brandRepository.delete(brand);
+    }
+
+    public String checkUnique(Integer id, String name) {
+        boolean isCreatingNewBrand = (id == null);
+        if(isCreatingNewBrand){
+            if(brandRepository.findByName(name) != null){
+                return "Duplicate Name";
+            }
+        }
+        return "OK";
     }
 }
