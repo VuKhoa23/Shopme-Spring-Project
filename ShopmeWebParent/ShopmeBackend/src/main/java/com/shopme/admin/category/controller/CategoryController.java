@@ -146,7 +146,6 @@ public class CategoryController {
                                  RedirectAttributes redirectAttributes) {
         try {
             Category category = categoryService.findById(id);
-            categoryService.save(category);
             categoryService.remove(category);
             redirectAttributes.addFlashAttribute("message", "Deleted category with " +
                     "id: " + id);

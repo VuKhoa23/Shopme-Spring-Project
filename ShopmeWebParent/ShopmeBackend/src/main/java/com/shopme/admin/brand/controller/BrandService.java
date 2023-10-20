@@ -31,4 +31,8 @@ public class BrandService {
             throw new BrandNotFoundException("This brand doesn't exists");
         }
     }
+
+    public void remove(Brand brand) {
+        brandRepository.delete(brand);
+    }
 }

@@ -59,7 +59,6 @@ public class BrandController {
         model.addAttribute("pageTitle", "New brand");
         List<Category> categoryList = categoryService.listCategoryByTreeInForm("--");
         model.addAttribute("categories", categoryList);
-        // categories
         return "brands/brands-form";
     }
 
@@ -74,6 +73,23 @@ public class BrandController {
             List<Category> categoryList = categoryService.listCategoryByTreeInForm("--");
             model.addAttribute("categories", categoryList);
             return "brands/brands-form";
+        } catch (BrandNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/brands";
+        }
+    }
+
+    @GetMapping("/brands/delete/{id}")
+    public String deleteBrand(Model model,
+                                 @PathVariable("id") Integer id,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            Brand brand = brandService.findById(id);
+            brandService.remove(brand);
+            redirectAttributes.addFlashAttribute("message", "Deleted brand with " +
+                    "id: " + id);
+            return "redirect:/brands";
+
         } catch (BrandNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
             return "redirect:/brands";
