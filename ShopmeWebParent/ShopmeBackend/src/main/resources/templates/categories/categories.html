@@ -89,10 +89,7 @@
           <tr>
             <th>ID</th>
             <th>Category Image</th>
-            <th>
-              <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
-              <a class="text-white" th:href="@{'/categories/page/' + ${currentPageNum} + '?sortOrder=' + ${reverseOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}">Category Name</a>
-            </th>
+            <th th:replace="fragments :: column-link('name', 'Categories name', 'none', '/categories/page/')" />
             <th>Enabled</th>
             <th>Action</th>
           </tr>
@@ -108,12 +105,8 @@
               <td th:replace="fragments::enabled-status(${category.enabled}, '/categories/', ${category.id}, 'category')" />
             </td>
             <td class="d-flex justify-content-around">
-              <a th:href="@{'/categories/edit/' + ${category.id}}">
-                <i class="fas fa-edit fa-2x green-icon"></i>
-              </a>
-              <a class="delete-link" th:href="@{'/categories/delete/' + ${category.id}}" th:categoryId="${category.id}">
-                <i class="fas fa-trash fa-2x red-icon"></i>
-              </a>
+              <a th:replace="fragments::edit('category', ${category.id}, '/categories/')" />
+              <a th:replace="fragments::delete('category', ${category.id}, '/categories/')" />
             </td>
           </tr>
         </tbody>
@@ -134,10 +127,7 @@
         <thead class="thead-dark">
           <tr>
             <th>Category Image</th>
-            <th>
-              <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
-              <a class="text-white" th:href="@{'/categories/page/' + ${currentPageNum} + '?sortOrder=' + ${reverseOrder} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}"> Sort Category Name</a>
-            </th>
+            <th th:replace="fragments :: column-link('name', 'Categories name', 'none', '/categories/page/')" />
           </tr>
         </thead>
         <tbody>
@@ -150,12 +140,8 @@
               <p>[[${category.name}]]</p>
               <td th:replace="fragments::enabled-status(${category.enabled}, '/categories/', ${category.id}, 'category')" />
 
-              <a th:href="@{'/categories/edit/' + ${category.id}}">
-                <i class="fas fa-edit fa-2x green-icon"></i>
-              </a>
-              <a class="delete-link" th:href="@{'/categories/delete/' + ${category.id}}" th:categoryId="${category.id}">
-                <i class="fas fa-trash fa-2x red-icon"></i>
-              </a>
+              <a th:replace="fragments::edit('category', ${category.id}, '/categories/')" />
+              <a th:replace="fragments::delete('category', ${category.id}, '/categories/')" />
             </td>
           </tr>
         </tbody>

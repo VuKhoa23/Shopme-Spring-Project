@@ -7,6 +7,7 @@ import com.shopme.admin.category.CategoryService;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -26,8 +27,45 @@ public class BrandController {
 
     @GetMapping("/brands")
     public String listAll(Model model) {
+        return listByPage(model, 1, "asc", "name");
+    }
 
-        model.addAttribute("brands", brandService.listAll());
+    @GetMapping("/brands/page/{pageNum}")
+    public String listByPage(Model model,
+                             @PathVariable("pageNum") int pageNum,
+                             @RequestParam(value = "sortOrder", required = false) String sortOrder,
+                             @RequestParam(value = "keyWord", required = false) String keyWord) {
+
+
+        if (sortOrder == null || sortOrder.isEmpty()) {
+            sortOrder = "asc";
+        }
+
+        if (sortOrder.equals("asc")) {
+            model.addAttribute("reverseSortOrder", "desc");
+        } else {
+            model.addAttribute("reverseSortOrder", "asc");
+
+        }
+
+        Page<Brand> brandPage = brandService.listByPage(pageNum);
+
+        int start = (pageNum - 1) * BrandService.PAGE_SIZE + 1;
+        long end = start + BrandService.PAGE_SIZE - 1;
+        if(end > brandPage.getTotalElements()){
+            end = brandPage.getTotalElements();
+        }
+
+        model.addAttribute("totalPages", brandPage.getTotalPages());
+        model.addAttribute("totalItems", brandPage.getTotalElements());
+        model.addAttribute("currentPageNum", pageNum);
+        model.addAttribute("sortOrder", sortOrder);
+        model.addAttribute("start", start);
+        model.addAttribute("end", end);
+        model.addAttribute("sortField", "name");
+        model.addAttribute("keyWord", keyWord);
+
+        model.addAttribute("brands", brandPage.getContent());
         return "brands/brands";
     }
 

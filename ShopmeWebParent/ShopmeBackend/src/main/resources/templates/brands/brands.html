@@ -48,7 +48,7 @@
           <tr>
             <th>ID</th>
             <th>Brand Logo</th>
-            <th>Brand name</th>
+            <th th:replace="fragments :: column-link('name', 'Brands name', 'none', '/brands/page/')" />
             <th>Brand Categories</th>
             <th>Action</th>
           </tr>
@@ -74,9 +74,7 @@
         </tbody>
       </table>
 
-      <div class="text-center">
-        This will be pagination fragment
-      </div>
+      <div th:replace="fragments::pagination('/brands', 'brands')"></div>
 
     </div>
 
