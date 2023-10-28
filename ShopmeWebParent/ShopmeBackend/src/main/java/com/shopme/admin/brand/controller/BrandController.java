@@ -27,7 +27,7 @@ public class BrandController {
 
     @GetMapping("/brands")
     public String listAll(Model model) {
-        return listByPage(model, 1, "asc", "name");
+        return listByPage(model, 1, "asc", "");
     }
 
     @GetMapping("/brands/page/{pageNum}")
@@ -45,10 +45,9 @@ public class BrandController {
             model.addAttribute("reverseSortOrder", "desc");
         } else {
             model.addAttribute("reverseSortOrder", "asc");
-
         }
 
-        Page<Brand> brandPage = brandService.listByPage(pageNum);
+        Page<Brand> brandPage = brandService.listByPage(keyWord ,pageNum, sortOrder);
 
         int start = (pageNum - 1) * BrandService.PAGE_SIZE + 1;
         long end = start + BrandService.PAGE_SIZE - 1;
