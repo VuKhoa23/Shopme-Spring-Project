@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragments :: head('Products Listing - Shopme Admin')">
+
+<body>
+  <div class="container-fluid">
+    <div th:replace="fragments :: header-nav-bar" />
+
+    <div class="mb-2 ">
+      <h1>Manage Products</h1>
+      <a th:href="@{/products/new}" title="Create Products" class="user-p">
+        <i class="fas fa-folder-plus fa-3x gray-icon" aria-hidden="true"></i>
+      </a>
+      &nbsp;&nbsp;
+      <a th:href="@{/products/export/csv}" title="Export CSV File">
+        <i class="fas fa-file-csv fa-3x gray-icon"></i>
+      </a>
+    </div>
+
+    <!-- search form -->
+
+    <div class="mb-2 ">
+      <form th:action="@{/products/page/1}" class="form-inline" method="GET">
+        <input type=hidden name="sortField" th:value="${sortField}" />
+        <input type=hidden name="sortOrder" th:value="${sortOrder}" />
+        Filter:&nbsp;
+        <input class="form-control" type="search" name="keyWord" required />
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary fas fa-search"></button>
+        &nbsp;&nbsp;
+        <button type="button" onclick="clearFilter()" class="btn btn-secondary fas fa-eraser"></button>
+      </form>
+    </div>
+
+    <div th:if="${message} != null">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        [[${message}]]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <!-- Large screen -->
+    <div class="large-screen">
+      <table class="table table-bordered table-striped table-hover table-responsive-xl">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Products Image</th>
+            <th th:replace="fragments :: column-link('name', 'Products name', 'none', '/products/page/')" />
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Enabled</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="product: ${products}">
+            <td>[[${product.id}]]</td>
+            <td>
+              <img style="width: 150px;" alt="image" />
+            </td>
+            <td>[[${product.name}]]</td>
+            <td>
+              [[${product.brand.name}]]
+            </td>
+            <td>
+              [[${product.category.name}]]
+            </td>
+            <td class="text-center">
+              <td th:replace="fragments::enabled-status(${product.enabled}, '/products/', ${product.id}, 'product')" />
+            </td>
+            <td class="d-flex justify-content-around">
+              <a th:replace="fragments::edit('product', ${product.id}, '/products/')" />
+              <a th:replace="fragments::delete('product', ${product.id}, '/products/')" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- <div th:replace="fragments::pagination('/products', 'products')"></div> -->
+
+    </div>
+
+
+
+
+
+    <!-- Modal -->
+
+    <div class="modal fade text-center" id="modalConfirm">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="confirmTitle">Delete</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <span id="confirmBody">Are you sure to delete this product ?</span>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-success" href="" id="confirm-link">Yes</a>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div th:replace="fragments :: footer" />
+  </div>
+  <script>
+    $(document).ready(() => {
+      $(".delete-link").on('click', function (e) {
+        e.preventDefault();
+        url = $(this).attr("href");
+        brandId = $(this).attr("deleteId")
+        $("#confirm-link").attr("href", url)
+        $("#confirmBody").text(`Are you sure you want to delete brand ${brandId} ?`);
+        $("#modalConfirm").modal();
+      });
+
+
+    });
+
+    function clearFilter() {
+      window.location = "[[@{/products}]]"
+    }
+  </script>
+</body>
+
+</html>

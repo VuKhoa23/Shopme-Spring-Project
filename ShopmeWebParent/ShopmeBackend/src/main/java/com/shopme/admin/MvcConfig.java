@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // user photos
         WebMvcConfigurer.super.addResourceHandlers(registry);
         String dirName = "user-photos";
         Path userPhotosDir = Paths.get(dirName);
@@ -21,6 +22,7 @@ public class MvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:/" + userPhotosPath + "/");
 
 
+        // categories images
         WebMvcConfigurer.super.addResourceHandlers(registry);
         //categories image is at the same level as front end and back end
         String categoriesDirName = "../categories-images";
@@ -32,6 +34,7 @@ public class MvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:/" + categoriesPhotosPath + "/");
 
 
+        // brands logo
         WebMvcConfigurer.super.addResourceHandlers(registry);
         //categories image is at the same level as front end and back end
         String brandsDirName = "../brands-logos";
