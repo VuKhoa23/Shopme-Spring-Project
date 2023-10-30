@@ -27,6 +27,11 @@ public class Brand {
     public Brand() {
     }
 
+    public Brand(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Brand(String name, String logo, Set<Category> categories) {
         this.name = name;
         this.logo = logo;
@@ -39,6 +44,8 @@ public class Brand {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+
 
     public Integer getId() {
         return id;

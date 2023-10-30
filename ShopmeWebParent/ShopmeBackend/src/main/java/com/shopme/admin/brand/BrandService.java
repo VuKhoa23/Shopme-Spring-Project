@@ -66,4 +66,9 @@ public class BrandService {
         }
         return brandRepository.findAll(pageable);
     }
+
+    public List<Brand> listAllProjection(){
+        return brandRepository.findAllProjection();
+    }
+
 }

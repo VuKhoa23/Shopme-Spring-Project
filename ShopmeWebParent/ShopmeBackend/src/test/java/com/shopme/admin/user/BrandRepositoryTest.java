@@ -107,4 +107,11 @@ public class BrandRepositoryTest {
         Brand samsung = brandRepository.findByName("Samsung Electronics");
         System.out.println(samsung);
     }
+
+    @Test
+    public void findAllWithProjection(){
+        List<Brand> brands = brandRepository.findAllProjection();
+
+        System.out.println(brands);
+    }
 }
