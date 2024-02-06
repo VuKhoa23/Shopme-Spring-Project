@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 
-<head th:replace="fragments :: head('Products Listing - Shopme Admin')">
+<head th:replace="fragments :: head('Products Listing - Shopme Admin', 'none')">
 
 <body>
   <div class="container-fluid">
@@ -115,9 +115,9 @@
       $(".delete-link").on('click', function (e) {
         e.preventDefault();
         url = $(this).attr("href");
-        brandId = $(this).attr("deleteId")
+        productId = $(this).attr("deleteId")
         $("#confirm-link").attr("href", url)
-        $("#confirmBody").text(`Are you sure you want to delete brand ${brandId} ?`);
+        $("#confirmBody").text(`Are you sure you want to delete productId ${productId} ?`);
         $("#modalConfirm").modal();
       });
 

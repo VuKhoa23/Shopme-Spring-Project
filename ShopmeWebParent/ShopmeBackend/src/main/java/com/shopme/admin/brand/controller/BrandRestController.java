@@ -37,5 +37,6 @@ public class BrandRestController {
             throw new BrandNotFoundRestException();
         }
     }
+
 }
 

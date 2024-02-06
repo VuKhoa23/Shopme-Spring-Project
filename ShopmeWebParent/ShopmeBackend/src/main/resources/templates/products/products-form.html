@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 
-<head th:replace="fragments :: head(${pageTitle})" />
+<head>
+  <!--  set remove as tag so the parent widget 'head' will be remove-->
+
+  <head th:replace="fragments :: head(${pageTitle}, 'tag')" />
+  <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+  <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
 
 <body>
   <div class="container-fluid">
@@ -10,7 +16,7 @@
       <a th:href="@{/products}">Back to products listing</a>
     </div>
 
-    <form th:action="@{/products/save}" method="POST" style="margin: 0 auto" th:object="${product}" enctype="multipart/form-data">
+    <form th:action="@{/products/save}" method="POST" style="margin: 0 auto" th:object="${product}" enctype="multipart/form-data" onsubmit="return checkUnique(this)">
       <input type="hidden" th:field="*{id}" />
 
       <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -26,6 +32,9 @@
         <li class="nav-item">
           <a class="nav-link" id="details-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="false">Details</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" id="shipping-tab" data-toggle="tab" href="#shipping" role="tab" aria-controls="shipping" aria-selected="false">Shipping</a>
+        </li>
       </ul>
 
       <!-- Tab panes -->
@@ -34,13 +43,16 @@
           <div th:replace="products/product-overview::overview" />
         </div>
         <div class="tab-pane" id="description" role="tabpanel" aria-labelledby="description-tab">
-          Description
+          <div th:replace="products/product-description::description" />
         </div>
         <div class="tab-pane" id="images" role="tabpanel" aria-labelledby="images-tab">
           Images tab
         </div>
         <div class="tab-pane" id="details" role="tabpanel" aria-labelledby="details-tab">
           Details tab
+        </div>
+        <div class="tab-pane" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
+          <div th:replace="products/product-shipping::shipping" />
         </div>
       </div>
   </div>
@@ -69,11 +81,15 @@
     categoryDropdown = $("#category")
     moduleURL = "[[@{/products}]]"
     $(document).ready(function () {
+
       getCategoryFromBrand($("#brand").val())
 
       $("#brand").change(function () {
         getCategoryFromBrand($(this).val())
       })
+
+      $("#shortDescription").richText();
+      $("#fullDescription").richText();
     })
 
     function getCategoryFromBrand(id) {
@@ -96,11 +112,12 @@
     function checkUnique(form) {
       productId = $("#id").val();
       productName = $("#name").val();
+      productAlias = $("#alias").val();
       csrf_token = $("input[name='_csrf']").val();
 
       url = "[[@{/products/check-unique}]]";
 
-      params = { id: productId, name: productName, _csrf: csrf_token };
+      params = { id: productId, name: productName, _csrf: csrf_token, alias: productAlias };
 
 
       $.post(url, params, (response) => {
